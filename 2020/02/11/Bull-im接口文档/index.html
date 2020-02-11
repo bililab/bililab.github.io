@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Bull.im接口文档 | 比例云</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="接口地址 https:&#x2F;&#x2F;api.bull.im  接口统一header返回说明   header 说明 备注    x-session session值    x-csrf csft token    接口统一header请求说明主要公共参数:    header 说明 备注    x-session 从header同名参数取 （可选）默认使用cookie   x-csrf 从header同名参">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bull.im接口文档">
+<meta property="og:url" content="http://bililab.com/2020/02/11/Bull-im%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/index.html">
+<meta property="og:site_name" content="比例云">
+<meta property="og:description" content="接口地址 https:&#x2F;&#x2F;api.bull.im  接口统一header返回说明   header 说明 备注    x-session session值    x-csrf csft token    接口统一header请求说明主要公共参数:    header 说明 备注    x-session 从header同名参数取 （可选）默认使用cookie   x-csrf 从header同名参">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-02-11T14:14:56.000Z">
+<meta property="article:modified_time" content="2020-02-11T08:35:13.373Z">
+<meta property="article:author" content="Bililab.com">
+<meta property="article:tag" content="比例云 bililab biliyun bilicloud">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="比例云" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">比例云</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">定制云就用比例云</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://bililab.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Bull-im接口文档" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/11/Bull-im%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/" class="article-date">
+  <time datetime="2020-02-11T14:14:56.000Z" itemprop="datePublished">2020-02-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Bull.im接口文档
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="接口地址"><a href="#接口地址" class="headerlink" title="接口地址"></a>接口地址</h3><blockquote>
+<p><a href="https://api.bull.im" target="_blank" rel="noopener">https://api.bull.im</a></p>
+</blockquote>
+<h3 id="接口统一header返回说明"><a href="#接口统一header返回说明" class="headerlink" title="接口统一header返回说明"></a>接口统一header返回说明</h3><table>
+<thead>
+<tr>
+<th align="center">header</th>
+<th align="left">说明</th>
+<th align="center">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">x-session</td>
+<td align="left">session值</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">x-csrf</td>
+<td align="left">csft token</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<h3 id="接口统一header请求说明"><a href="#接口统一header请求说明" class="headerlink" title="接口统一header请求说明"></a>接口统一header请求说明</h3><p><strong>主要公共参数:</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">header</th>
+<th align="left">说明</th>
+<th align="center">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">x-session</td>
+<td align="left">从header同名参数取</td>
+<td align="center">（可选）默认使用cookie</td>
+</tr>
+<tr>
+<td align="center">x-csrf</td>
+<td align="left">从header同名参数取</td>
+<td align="center">post请求必填，防止xss攻击</td>
+</tr>
+<tr>
+<td align="center">uid</td>
+<td align="left">用户id</td>
+<td align="center">(可选)</td>
+</tr>
+<tr>
+<td align="center">Locale</td>
+<td align="left">区域（86）</td>
+<td align="center">(可选)</td>
+</tr>
+<tr>
+<td align="center">TimeZone</td>
+<td align="left">时区（+8）</td>
+<td align="center">(可选)</td>
+</tr>
+<tr>
+<td align="center">Lang</td>
+<td align="left">语言（zh-CN）</td>
+<td align="center">(可选)</td>
+</tr>
+<tr>
+<td align="center">IP</td>
+<td align="left">ip(127.0.0.1)</td>
+<td align="center">(可选)</td>
+</tr>
+<tr>
+<td align="center">DevID</td>
+<td align="left">uuid</td>
+<td align="center">(可选)</td>
+</tr>
+<tr>
+<td align="center">Platform</td>
+<td align="left">“Android”,”iOS”,”Web”</td>
+<td align="center">必选</td>
+</tr>
+<tr>
+<td align="center">DevOS</td>
+<td align="left">windows,ios</td>
+<td align="center">必选</td>
+</tr>
+<tr>
+<td align="center">DevHW</td>
+<td align="left">{“cpu”:4,”gpu”:””,”mem”:”2GB”}</td>
+<td align="center">必选</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="统一消息说明"><a href="#统一消息说明" class="headerlink" title="统一消息说明"></a>统一消息说明</h3><p><strong>错误消息说明：</strong><br>success: http.statuscode == 200<br>failed: http.statuscode != 200</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;code&quot;: xxxxx, &#x2F;&#x2F;错误码</span><br><span class="line">    &quot;message&quot;:xxxx &#x2F;&#x2F;错误消息</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">	1001: &quot;verify captcha code fail&quot;,     &#x2F;&#x2F; 验证码错误</span><br><span class="line">	1002: &quot;need captcha code&quot;,            &#x2F;&#x2F; 需要验证码</span><br><span class="line">	1003: &quot;email&#x2F;sms verifycode fail&quot;,    &#x2F;&#x2F; 邮件&#x2F;sms验证码错误</span><br><span class="line">	1004: &quot;email&#x2F;sms verifycode timeout&quot;, &#x2F;&#x2F; 邮件&#x2F;sms验证码错误</span><br><span class="line">	1005: &quot;update error&quot;,                 &#x2F;&#x2F; 更新失败</span><br><span class="line">	1006: &quot;update success&quot;,               &#x2F;&#x2F; 更新成功</span><br><span class="line"></span><br><span class="line">	1101: &quot;user exist&quot;,            &#x2F;&#x2F; 该账号已经存在</span><br><span class="line">	1102: &quot;user not found&quot;,        &#x2F;&#x2F; 账号不存在</span><br><span class="line">	1103: &quot;user auth error&quot;,       &#x2F;&#x2F; 用户验证失败</span><br><span class="line">	1104: &quot;login failed&quot;,          &#x2F;&#x2F; 登录失败</span><br><span class="line">	1105: &quot;register failed&quot;,       &#x2F;&#x2F; 注册失败</span><br><span class="line">	1106: &quot;verify salt failed&quot;,    &#x2F;&#x2F;验证salt</span><br><span class="line">	1107: &quot;Username exists&quot;,       &#x2F;&#x2F;用户名存在</span><br><span class="line">	1108: &quot;Email exists&quot;,          &#x2F;&#x2F;邮箱存在</span><br><span class="line">	1109: &quot;Phone exists&quot;,          &#x2F;&#x2F;电话存在</span><br><span class="line">	1110: &quot;Send sms&#x2F;email failed&quot;, &#x2F;&#x2F;发送验证码失败</span><br><span class="line"></span><br><span class="line">	1201: &quot;2FA Has Enabled&quot;,    &#x2F;&#x2F; 2fa验证已经开启</span><br><span class="line">	1202: &quot;2FA Verify Fail&quot;,    &#x2F;&#x2F; 2fa验证失败</span><br><span class="line">	1203: &quot;2FA Bind Fail&quot;,      &#x2F;&#x2F; 2fa绑定失败</span><br><span class="line">	1204: &quot;2FA Has Disabled&quot;,   &#x2F;&#x2F; 2fa未开启</span><br><span class="line">	1205: &quot;2FA need&quot;,           &#x2F;&#x2F; 2fa需要验证</span><br><span class="line">	1206: &quot;Verify user need&quot;,   &#x2F;&#x2F; 验证用户需要</span><br><span class="line">	1207: &quot;Verify user failed&quot;, &#x2F;&#x2F; 严重用户失败</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所有post/put等接口都后续都会做频率验证码验证，一开始没有验证，但当触发后会返回1002错误码请求验证验证码。目前有几个接口默认有图片验证码</p>
+<p><strong>验证码参数:</strong><br>参数名称 | 类型 | 是否必须 | 说明<br>:—: | :—: | :—: | :—<br>generate_id|string| true| 20位长度<br>generate_code|string| true| 4位长度</p>
+<h3 id="1-请求图片验证码id"><a href="#1-请求图片验证码id" class="headerlink" title="1.请求图片验证码id"></a>1.请求图片验证码id</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>GET /v1/captcha/generate</p>
+</blockquote>
+<ul>
+<li><p><strong>请求参数</strong>: 无</p>
+</li>
+<li><p><strong>返回参数</strong>：</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;code&quot;: 200,</span><br><span class="line">    &quot;data&quot;: &#123;</span><br><span class="line">        &quot;generate_id&quot;: &quot;rbrQk24qJbykUDIw4kCr&quot;,</span><br><span class="line">        &quot;expire&quot;: 3600</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-获取验证码图片"><a href="#2-获取验证码图片" class="headerlink" title="2.获取验证码图片"></a>2.获取验证码图片</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>GET /v1/captcha/generate/${captcha_id}.png</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: 无</li>
+</ul>
+<h3 id="3-获取qrcode图片"><a href="#3-获取qrcode图片" class="headerlink" title="3.获取qrcode图片"></a>3.获取qrcode图片</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>GET /v1/qrcode?text=${otpauth}</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: 无</li>
+</ul>
+<h3 id="4-获取国家码"><a href="#4-获取国家码" class="headerlink" title="4.获取国家码"></a>4.获取国家码</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>GET /v1/tools/areas</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: 无</li>
+</ul>
+<h3 id="5-发送注册验证码"><a href="#5-发送注册验证码" class="headerlink" title="5.发送注册验证码"></a>5.发送注册验证码</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/register/start</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+</tbody></table>
+<h3 id="6-重新发送注册验证码"><a href="#6-重新发送注册验证码" class="headerlink" title="6.重新发送注册验证码"></a>6.重新发送注册验证码</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/register/start/vcode</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+</tbody></table>
+<h3 id="7-注册账号"><a href="#7-注册账号" class="headerlink" title="7.注册账号"></a>7.注册账号</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/register</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: 无</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+<tr>
+<td align="center">password</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(inputpassword+salt)</td>
+</tr>
+<tr>
+<td align="center">salt</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(code)</td>
+</tr>
+<tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+</tbody></table>
+<h3 id="8-登陆前获取账户信息（salt）"><a href="#8-登陆前获取账户信息（salt）" class="headerlink" title="8.登陆前获取账户信息（salt）"></a>8.登陆前获取账户信息（salt）</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>GET /v1/login/start</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>返回数据:</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;salt&quot;: &quot;xxxxx&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-账号密码登录-退出"><a href="#9-账号密码登录-退出" class="headerlink" title="9.账号密码登录/退出"></a>9.账号密码登录/退出</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/login 登录<br>GET /v1/logout 退出</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+<tr>
+<td align="center">password</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(inputpassword+salt)</td>
+</tr>
+<tr>
+<td align="center">salt</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">totp_code</td>
+<td align="center">string</td>
+<td align="center">falase</td>
+<td align="left">这是二次验证码需要以后开启后才有，登录时会提示输入验证码，那个时候再弹出二次验证输入框 加上这个字段后重新提交 可以参考big.one的二次验证弹窗</td>
+</tr>
+</tbody></table>
+<h3 id="10-验证码登陆发送验证码"><a href="#10-验证码登陆发送验证码" class="headerlink" title="10.验证码登陆发送验证码"></a>10.验证码登陆发送验证码</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/login/start/vcode</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+</tbody></table>
+<h3 id="11-验证码登陆"><a href="#11-验证码登陆" class="headerlink" title="11.验证码登陆"></a>11.验证码登陆</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/login/code</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+<tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+<tr>
+<td align="center">totp_code</td>
+<td align="center">string</td>
+<td align="center">falase</td>
+<td align="left">这是二次验证码需要以后开启后才有，登录时会提示输入验证码，那个时候再弹出二次验证输入框 加上这个字段后重新提交 可以参考big.one的二次验证弹窗</td>
+</tr>
+</tbody></table>
+<h3 id="12-找回密码前校验账号"><a href="#12-找回密码前校验账号" class="headerlink" title="12.找回密码前校验账号"></a>12.找回密码前校验账号</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/forget/password/start</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+</tbody></table>
+<h3 id="13-找回密码重新发送验证码"><a href="#13-找回密码重新发送验证码" class="headerlink" title="13.找回密码重新发送验证码"></a>13.找回密码重新发送验证码</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/forget/password/start/vcode</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+</tbody></table>
+<h3 id="14-找回密码重置密码"><a href="#14-找回密码重置密码" class="headerlink" title="14.找回密码重置密码"></a>14.找回密码重置密码</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/forget/password</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+<tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+<tr>
+<td align="center">salt</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(code)</td>
+</tr>
+<tr>
+<td align="center">password</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(inputpassword+salt)</td>
+</tr>
+</tbody></table>
+<h3 id="15-获取当前用户信息"><a href="#15-获取当前用户信息" class="headerlink" title="15.获取当前用户信息"></a>15.获取当前用户信息</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址</strong> ：</p>
+</li>
+</ul>
+<blockquote>
+<p>GET /v1/account/</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: 无</li>
+</ul>
+<h3 id="16-登录用户发送验证码"><a href="#16-登录用户发送验证码" class="headerlink" title="16.登录用户发送验证码"></a>16.登录用户发送验证码</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址</strong> ：</p>
+</li>
+</ul>
+<blockquote>
+<p>POST /v1/account/vcode</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">type</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">目前只有2个值email/phone</td>
+</tr>
+<tr>
+<td align="center">这个主要是登录用户修改一些东西需要验证码时发送验证码 发送验证码前tab让他选择验证方式 返回的用户信息里有phone_status,email_status表示对应可用状态。一般用什么方式注册默认这个状态就是true</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h3 id="17-通过密码修改密码"><a href="#17-通过密码修改密码" class="headerlink" title="17.通过密码修改密码"></a>17.通过密码修改密码</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址</strong> ：</p>
+</li>
+</ul>
+<blockquote>
+<p>POST /v1/account/reset/password</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">salt</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(code)这是新的salt</td>
+</tr>
+<tr>
+<td align="center">new_salt</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(code)这是新的salt</td>
+</tr>
+<tr>
+<td align="center">password</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(inputmassword+salt)</td>
+</tr>
+<tr>
+<td align="center">new_password</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(inputmassword+newsalt)</td>
+</tr>
+<tr>
+<td align="center">generate_id</td>
+<td align="center">string</td>
+<td align="center">false</td>
+<td align="left">20位长度(后期根据请求频率出现，默认不需要)</td>
+</tr>
+<tr>
+<td align="center">generate_code</td>
+<td align="center">string</td>
+<td align="center">false</td>
+<td align="left">6位长度(后期根据请求频率出现，默认不需要)</td>
+</tr>
+</tbody></table>
+<h3 id="18-通过发送验证码修改密码"><a href="#18-通过发送验证码修改密码" class="headerlink" title="18.通过发送验证码修改密码"></a>18.通过发送验证码修改密码</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址</strong> ：</p>
+</li>
+</ul>
+<blockquote>
+<p>POST /v1/account/reset/password/code</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">type</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">目前只有2个值email/phone，前面登录用户用什么方式发送的验证码这里就填什么</td>
+</tr>
+<tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+<tr>
+<td align="center">salt</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(code)</td>
+</tr>
+<tr>
+<td align="center">password</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(inputpassword+salt)</td>
+</tr>
+</tbody></table>
+<h3 id="19-二次验证totp-获取qrcodeUrl-amp-amp-secret"><a href="#19-二次验证totp-获取qrcodeUrl-amp-amp-secret" class="headerlink" title="19.二次验证totp 获取qrcodeUrl&amp;&amp;secret"></a>19.二次验证totp 获取qrcodeUrl&amp;&amp;secret</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址</strong> ：</p>
+</li>
+</ul>
+<blockquote>
+<p>GET /v1/acccount/totp/start</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: 无</li>
+<li></li>
+<li><strong>返回数据:</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;code&quot;: 200,</span><br><span class="line">    &quot;data&quot;: &#123;</span><br><span class="line">        &quot;otpauth&quot;: &quot;otpauth%3A%2F%2Ftotp%2FBULL.im%3A8615102366689%3Fissuer%3DBULL.im%26secret%3DHLBUICZJTZBPSBIK&quot;,</span><br><span class="line">        &quot;secret&quot;: &quot;HLBUICZJTZBPSBIK&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>optauth这个放到前面生成二维码的参数text 显示绑定二次验证的二维码<br>secret是密钥 用户自己保存好</p>
+</blockquote>
+<h3 id="20-二次验证开启"><a href="#20-二次验证开启" class="headerlink" title="20.二次验证开启"></a>20.二次验证开启</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址</strong> ：</p>
+</li>
+</ul>
+<blockquote>
+<p>POST /v1/account/totp/enable</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+</tbody></table>
+<h3 id="21-二次验证关闭"><a href="#21-二次验证关闭" class="headerlink" title="21.二次验证关闭"></a>21.二次验证关闭</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址:</strong> </p>
+</li>
+</ul>
+<blockquote>
+<p>POST /v1/accoount/totp/disable</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+</tbody></table>
+<h3 id="22-更新用户通用信息"><a href="#22-更新用户通用信息" class="headerlink" title="22.更新用户通用信息"></a>22.更新用户通用信息</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址:</strong> </p>
+</li>
+</ul>
+<blockquote>
+<p>PUT /v1/accoount</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">name</td>
+<td align="center">string</td>
+<td align="center">false</td>
+<td align="left">用户昵称</td>
+</tr>
+<tr>
+<td align="center">nation</td>
+<td align="center">string</td>
+<td align="center">false</td>
+<td align="left">国家地区</td>
+</tr>
+<tr>
+<td align="center">timezone</td>
+<td align="center">string</td>
+<td align="center">false</td>
+<td align="left">时区</td>
+</tr>
+<tr>
+<td align="center">avatar</td>
+<td align="center">string</td>
+<td align="center">false</td>
+<td align="left">头像图片地址</td>
+</tr>
+<tr>
+<td align="center">lang</td>
+<td align="center">string</td>
+<td align="center">false</td>
+<td align="left">语言</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>需要更新什么对应传对应的字段</p>
+</blockquote>
+<h3 id="23-登录用户修改邮箱和电话发送验证码后的验证码验证"><a href="#23-登录用户修改邮箱和电话发送验证码后的验证码验证" class="headerlink" title="23.登录用户修改邮箱和电话发送验证码后的验证码验证"></a>23.登录用户修改邮箱和电话发送验证码后的验证码验证</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址:</strong> </p>
+</li>
+</ul>
+<blockquote>
+<p>POST /v1/accoount/verify/code</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">type</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">目前只有2个值email/phone，前面登录用户用什么方式发送的验证码这里就填什么</td>
+</tr>
+<tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+</tbody></table>
+<h3 id="24-登录用户修改邮箱"><a href="#24-登录用户修改邮箱" class="headerlink" title="24.登录用户修改邮箱"></a>24.登录用户修改邮箱</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址:</strong> </p>
+</li>
+</ul>
+<blockquote>
+<p>PUT /v1/accoount/email</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+<tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>注意这里的账号验证码是新的    修改前的验证用前面的/account/vcode发送验证码和/account/verify/code验证验证码后才能在这里提交新账号修改</p>
+</blockquote>
+<h3 id="24-登录用户修改电话号码"><a href="#24-登录用户修改电话号码" class="headerlink" title="24.登录用户修改电话号码"></a>24.登录用户修改电话号码</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址:</strong> </p>
+</li>
+</ul>
+<blockquote>
+<p>PUT /v1/accoount/phone</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+<tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>注意这里的账号验证码是新的    修改前的验证用前面的/account/vcode发送验证码和/account/verify/code验证验证码后才能在这里提交新账号修改</p>
+</blockquote>
+<h3 id="25-登录用户获取上传头像token"><a href="#25-登录用户获取上传头像token" class="headerlink" title="25.登录用户获取上传头像token"></a>25.登录用户获取上传头像token</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址:</strong> </p>
+</li>
+</ul>
+<blockquote>
+<p>GET /v1/accoount/upload/token</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: 无</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://bililab.com/2020/02/11/Bull-im%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/" data-id="ck6hmrb5200041bpf4gwt0gfm" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/02/11/rook-ceph-debug/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          rook-ceph debug
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/02/11/Redis-Cluster/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Redis Cluster</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/02/11/k8s-install/">k8s install</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/rook-ceph-debug/">rook-ceph debug</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/Bull-im%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/">Bull.im接口文档</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/Redis-Cluster/">Redis Cluster</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/AES-RSA-api%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86/">AES RSA api接口数据加密</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      <a style="float:right" name="href" href="http://www.beian.miit.gov.cn/" target="_blank" class="copyright-text">渝ICP备19008056号</a>
+      &copy; 2020 Bililab.com<br>
+      <!-- Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> -->
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

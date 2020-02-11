@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>AES RSA api接口数据加密 | 比例云</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="解决方案需要联合使用对称加密AES与非对称加密RSA 每次调用客户端随机产生一个aes密码，并把调用明文加密成调用密文，然后将aes密码用rsa公玥加密成密码密文后连同调用调用密文一起传给后端，后端使用rsa私玥对密码密文进行解密aes密码，然后aes密码解密调用密文获得调用明文。然后进行业务处理。后端在返回响应数据时，使用刚才的aes密码，将响应明文加密成响应密文，传递给客户端。客户端收到响应密">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AES RSA api接口数据加密">
+<meta property="og:url" content="http://bililab.com/2020/02/11/AES-RSA-api%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86/index.html">
+<meta property="og:site_name" content="比例云">
+<meta property="og:description" content="解决方案需要联合使用对称加密AES与非对称加密RSA 每次调用客户端随机产生一个aes密码，并把调用明文加密成调用密文，然后将aes密码用rsa公玥加密成密码密文后连同调用调用密文一起传给后端，后端使用rsa私玥对密码密文进行解密aes密码，然后aes密码解密调用密文获得调用明文。然后进行业务处理。后端在返回响应数据时，使用刚才的aes密码，将响应明文加密成响应密文，传递给客户端。客户端收到响应密">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.oss.biliyun.net/blog/1.0/production/20180227173359994_biliyun.png">
+<meta property="article:published_time" content="2020-02-11T14:13:32.000Z">
+<meta property="article:modified_time" content="2020-02-11T08:35:13.373Z">
+<meta property="article:author" content="Bililab.com">
+<meta property="article:tag" content="比例云 bililab biliyun bilicloud">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.oss.biliyun.net/blog/1.0/production/20180227173359994_biliyun.png">
+  
+    <link rel="alternate" href="/atom.xml" title="比例云" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">比例云</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">定制云就用比例云</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://bililab.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-AES-RSA-api接口数据加密" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/11/AES-RSA-api%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86/" class="article-date">
+  <time datetime="2020-02-11T14:13:32.000Z" itemprop="datePublished">2020-02-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      AES RSA api接口数据加密
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>解决方案<br>需要联合使用对称加密AES与非对称加密RSA</p>
+<p>每次调用客户端随机产生一个aes密码，并把调用明文加密成调用密文，然后将aes密码用rsa公玥加密成密码密文后连同调用调用密文一起传给后端，后端使用rsa私玥对密码密文进行解密aes密码，然后aes密码解密调用密文获得调用明文。然后进行业务处理。后端在返回响应数据时，使用刚才的aes密码，将响应明文加密成响应密文，传递给客户端。客户端收到响应密文后，使用aes密码解密得到响应明文。</p>
+<p><img src="https://cdn.oss.biliyun.net/blog/1.0/production/20180227173359994_biliyun.png" alt="20180227173359994_biliyun"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">明文数据使用 AES 对称加密算法进行加密, AES 密钥使用 RSA 进行加密传输并对数据进行数据签名</span><br><span class="line">加密结果密文数据结构: [数字签名(AES密钥密文+明文数据密文)][AES密钥密文][明文密文]</span><br></pre></td></tr></table></figure>
+
+<p><strong>参考</strong><br><a href="http://www.lampnick.com/php/728" target="_blank" rel="noopener">使用AES ECB PKCS5Padding+RSA对接口进行签名及加密的go代码实现</a><br><a href="https://github.com/takmongwai/aes-rsa" target="_blank" rel="noopener">使用 AES 和 RSA 对数据进行加密和解密</a><br><a href="https://blog.csdn.net/xz_studying/article/details/80314111" target="_blank" rel="noopener">RSA总结</a></p>
+<p><a href="https://ekyu.moe/article/aes-cfb-in-golang-and-nodejs/" target="_blank" rel="noopener">aes cfb参考nodejs</a></p>
+<p><a href="https://www.cnblogs.com/starwolf/p/3365834.htmlhttps://www.cnblogs.com/starwolf/p/3365834.html" target="_blank" rel="noopener">aes gcm cbc cfb等5种模式简介</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://bililab.com/2020/02/11/AES-RSA-api%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86/" data-id="ck6hmrb4i00001bpf4tsqhz1p" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/02/11/Redis-Cluster/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Redis Cluster
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/02/11/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/02/11/k8s-install/">k8s install</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/rook-ceph-debug/">rook-ceph debug</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/Bull-im%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/">Bull.im接口文档</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/Redis-Cluster/">Redis Cluster</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/AES-RSA-api%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86/">AES RSA api接口数据加密</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      <a style="float:right" name="href" href="http://www.beian.miit.gov.cn/" target="_blank" class="copyright-text">渝ICP备19008056号</a>
+      &copy; 2020 Bililab.com<br>
+      <!-- Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> -->
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

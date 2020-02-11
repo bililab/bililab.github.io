@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Redis Cluster | 比例云</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Redis clusterA redis cluster running in Kubernetes. :warning: Note: this repository is no longer actively maintained. While it served as a nice example to run Redis Cluster in Kubernetes when I wrote">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis Cluster">
+<meta property="og:url" content="http://bililab.com/2020/02/11/Redis-Cluster/index.html">
+<meta property="og:site_name" content="比例云">
+<meta property="og:description" content="Redis clusterA redis cluster running in Kubernetes. :warning: Note: this repository is no longer actively maintained. While it served as a nice example to run Redis Cluster in Kubernetes when I wrote">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-02-11T14:14:22.000Z">
+<meta property="article:modified_time" content="2020-02-11T08:35:13.373Z">
+<meta property="article:author" content="Bililab.com">
+<meta property="article:tag" content="比例云 bililab biliyun bilicloud">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="比例云" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">比例云</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">定制云就用比例云</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://bililab.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Redis-Cluster" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/11/Redis-Cluster/" class="article-date">
+  <time datetime="2020-02-11T14:14:22.000Z" itemprop="datePublished">2020-02-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Redis Cluster
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Redis-cluster"><a href="#Redis-cluster" class="headerlink" title="Redis cluster"></a>Redis cluster</h1><p>A <a href="https://redis.io/topics/cluster-tutorial" target="_blank" rel="noopener">redis cluster</a> running in Kubernetes.</p>
+<p>:warning: <strong>Note: this repository is no longer actively maintained. While it served as a nice example to run Redis Cluster in Kubernetes when I wrote it, there are currently more stable solutions to spin up a cluster. I recommend looking at community-built Kubernetes Operators for Redis, or an actively maintained Helm chart.</strong></p>
+<p>If the cluster configuration of a redis node is lost in some way, it will come back with a different ID, which upsets the balance in the cluster (and probably in the Force). To prevent this, the setup uses a combination of Kubernetes StatefulSets and PersistentVolumeClaims to make sure the state of the cluster is maintained after rescheduling or failures.</p>
+<h2 id="Setup"><a href="#Setup" class="headerlink" title="Setup"></a>Setup</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f redis-cluster.yml</span><br></pre></td></tr></table></figure>
+<p>This will spin up 6 <code>redis-cluster</code> pods one by one, which may take a while. After all pods are in a running state, you can itialize the cluster using the <code>redis-cli</code> in any of the pods. After the initialization, you will end up with 3 master and 3 slave nodes.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it redis-cluster-0 -- redis-cli --cluster create --cluster-replicas 1 \</span><br><span class="line">$(kubectl get pods -l app=redis-cluster -o jsonpath=<span class="string">'&#123;range.items[*]&#125;&#123;.status.podIP&#125;:6379 '</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Adding-nodes"><a href="#Adding-nodes" class="headerlink" title="Adding nodes"></a>Adding nodes</h2><p>Adding nodes to the cluster involves a few manual steps. First, let’s add two nodes:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl scale statefulset redis-cluster --replicas=8</span><br></pre></td></tr></table></figure>
+
+<p>Have the first new node join the cluster as master:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> redis-cluster-0 -- redis-cli --cluster add-node \</span><br><span class="line">$(kubectl get pod redis-cluster-6 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379 \</span><br><span class="line">$(kubectl get pod redis-cluster-0 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379</span><br></pre></td></tr></table></figure>
+
+<p>The second new node should join the cluster as slave. This will automatically bind to the master with the least slaves (in this case, <code>redis-cluster-6</code>)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> redis-cluster-0 -- redis-cli --cluster add-node --cluster-slave \</span><br><span class="line">$(kubectl get pod redis-cluster-7 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379 \</span><br><span class="line">$(kubectl get pod redis-cluster-0 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379</span><br></pre></td></tr></table></figure>
+
+<p>Finally, automatically rebalance the masters:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> redis-cluster-0 -- redis-cli --cluster rebalance --cluster-use-empty-masters \</span><br><span class="line">$(kubectl get pod redis-cluster-0 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379</span><br></pre></td></tr></table></figure>
+
+<h2 id="Removing-nodes"><a href="#Removing-nodes" class="headerlink" title="Removing nodes"></a>Removing nodes</h2><h3 id="Removing-slaves"><a href="#Removing-slaves" class="headerlink" title="Removing slaves"></a>Removing slaves</h3><p>Slaves can be deleted safely. First, let’s get the id of the slave:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl <span class="built_in">exec</span> redis-cluster-7 -- redis-cli cluster nodes | grep myself</span><br><span class="line">3f7cbc0a7e0720e37fcb63a81dc6e2bf738c3acf 172.17.0.11:6379 myself,slave 32f250e02451352e561919674b8b705aef4dbdc6 0 0 0 connected</span><br></pre></td></tr></table></figure>
+
+<p>Then delete it:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> redis-cluster-0 -- redis-cli --cluster del-node \</span><br><span class="line">$(kubectl get pod redis-cluster-0 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379 \</span><br><span class="line">3f7cbc0a7e0720e37fcb63a81dc6e2bf738c3acf</span><br></pre></td></tr></table></figure>
+
+<h3 id="Removing-a-master"><a href="#Removing-a-master" class="headerlink" title="Removing a master"></a>Removing a master</h3><p>To remove master nodes from the cluster, we first have to move the slots used by them to the rest of the cluster, to avoid data loss.</p>
+<p>First, take note of the id of the master node we are removing:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl <span class="built_in">exec</span> redis-cluster-6 -- redis-cli cluster nodes | grep myself</span><br><span class="line">27259a4ae75c616bbde2f8e8c6dfab2c173f2a1d 172.17.0.10:6379 myself,master - 0 0 9 connected 0-1364 5461-6826 10923-12287</span><br></pre></td></tr></table></figure>
+
+<p>Also note the id of any other master node:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl <span class="built_in">exec</span> redis-cluster-6 -- redis-cli cluster nodes | grep master | grep -v myself</span><br><span class="line">32f250e02451352e561919674b8b705aef4dbdc6 172.17.0.4:6379 master - 0 1495120400893 2 connected 6827-10922</span><br><span class="line">2a42aec405aca15ec94a2470eadf1fbdd18e56c9 172.17.0.6:6379 master - 0 1495120398342 8 connected 12288-16383</span><br><span class="line">0990136c9a9d2e48ac7b36cfadcd9dbe657b2a72 172.17.0.2:6379 master - 0 1495120401395 1 connected 1365-5460</span><br></pre></td></tr></table></figure>
+
+<p>Then, use the <code>reshard</code> command to move all slots from <code>redis-cluster-6</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> redis-cluster-0 -- redis-cli --cluster reshard --cluster-yes \</span><br><span class="line">--cluster-from 27259a4ae75c616bbde2f8e8c6dfab2c173f2a1d \</span><br><span class="line">--cluster-to 32f250e02451352e561919674b8b705aef4dbdc6 \</span><br><span class="line">--cluster-slots 16384 \</span><br><span class="line">$(kubectl get pod redis-cluster-0 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379</span><br></pre></td></tr></table></figure>
+
+<p>After resharding, it is safe to delete the <code>redis-cluster-6</code> master node:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> redis-cluster-0 -- redis-cli --cluster del-node \</span><br><span class="line">$(kubectl get pod redis-cluster-0 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379 \</span><br><span class="line">27259a4ae75c616bbde2f8e8c6dfab2c173f2a1d</span><br></pre></td></tr></table></figure>
+
+<p>Finally, we can rebalance the remaining masters to evenly distribute slots:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> redis-cluster-0 -- redis-cli --cluster rebalance --cluster-use-empty-masters \</span><br><span class="line">$(kubectl get pod redis-cluster-0 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379</span><br></pre></td></tr></table></figure>
+
+<h3 id="Scaling-down"><a href="#Scaling-down" class="headerlink" title="Scaling down"></a>Scaling down</h3><p>After the master has been resharded and both nodes are removed from the cluster, it is safe to scale down the statefulset:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl scale statefulset redis-cluster --replicas=6</span><br></pre></td></tr></table></figure>
+
+<h2 id="Cleaning-up"><a href="#Cleaning-up" class="headerlink" title="Cleaning up"></a>Cleaning up</h2><p>``` bash<br>kubectl delete statefulset,svc,configmap,pvc -l app=redis-cluster</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://bililab.com/2020/02/11/Redis-Cluster/" data-id="ck6hmrb4r00011bpf2o53amlt" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/02/11/Bull-im%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Bull.im接口文档
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/02/11/AES-RSA-api%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">AES RSA api接口数据加密</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/02/11/k8s-install/">k8s install</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/rook-ceph-debug/">rook-ceph debug</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/Bull-im%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/">Bull.im接口文档</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/Redis-Cluster/">Redis Cluster</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/AES-RSA-api%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86/">AES RSA api接口数据加密</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      <a style="float:right" name="href" href="http://www.beian.miit.gov.cn/" target="_blank" class="copyright-text">渝ICP备19008056号</a>
+      &copy; 2020 Bililab.com<br>
+      <!-- Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> -->
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>比例云</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="定制云就用比例云">
+<meta property="og:type" content="website">
+<meta property="og:title" content="比例云">
+<meta property="og:url" content="http://bililab.com/index.html">
+<meta property="og:site_name" content="比例云">
+<meta property="og:description" content="定制云就用比例云">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="Bililab.com">
+<meta property="article:tag" content="比例云 bililab biliyun bilicloud">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="比例云" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">比例云</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">定制云就用比例云</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://bililab.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-k8s-install" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/11/k8s-install/" class="article-date">
+  <time datetime="2020-02-11T14:16:43.000Z" itemprop="datePublished">2020-02-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/11/k8s-install/">k8s install</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="test-env"><a href="#test-env" class="headerlink" title="test-env"></a>test-env</h1><h2 id="kubernetes"><a href="#kubernetes" class="headerlink" title="kubernetes"></a>kubernetes</h2><h3 id="prepare"><a href="#prepare" class="headerlink" title="prepare"></a>prepare</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">yum install -y conntrack ipvsadm ipset jq sysstat curl iptables libseccomp</span><br><span class="line"></span><br><span class="line"><span class="comment"># run as root on each node</span></span><br><span class="line">swapoff -a</span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld</span><br><span class="line">systemctl stop firewalld</span><br><span class="line">iptables -F</span><br><span class="line">sed -i <span class="string">'s/SELINUX=enforcing/SELINUX=disabled/g'</span> /etc/selinux/config</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"net.bridge.bridge-nf-call-iptables = 1"</span> &gt;&gt; /etc/sysctl.conf</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"net.bridge.bridge-nf-call-ip6tables = 1"</span> &gt;&gt; /etc/sysctl.conf</span><br><span class="line"></span><br><span class="line">modprobe ip_vs</span><br><span class="line">modprobe ip_vs_rr</span><br><span class="line">modprobe ip_vs_wrr</span><br><span class="line">modprobe ip_vs_sh</span><br><span class="line">modprobe nf_conntrack_ipv4</span><br><span class="line">lsmod | grep ip_vs</span><br></pre></td></tr></table></figure>
+
+<h3 id="cfsssl-node1"><a href="#cfsssl-node1" class="headerlink" title="cfsssl (node1)"></a>cfsssl (node1)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /opt/<span class="built_in">local</span>/cfssl</span><br><span class="line"><span class="built_in">cd</span> /opt/<span class="built_in">local</span>/cfssl</span><br><span class="line">wget https://pkg.cfssl.org/R1.2/cfssl_linux-amd64</span><br><span class="line">mv cfssl_linux-amd64 cfssl</span><br><span class="line">wget https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64</span><br><span class="line">mv cfssljson_linux-amd64 cfssljson</span><br><span class="line">wget https://pkg.cfssl.org/R1.2/cfssl-certinfo_linux-amd64</span><br><span class="line">mv cfssl-certinfo_linux-amd64 cfssl-certinfo</span><br><span class="line">chmod +x *</span><br></pre></td></tr></table></figure>
+
+<h2 id="create-certs-node1"><a href="#create-certs-node1" class="headerlink" title="create certs (node1)"></a>create certs (node1)</h2><ul>
+<li>create certs<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br></pre></td><td class="code"><pre><span class="line">mkdir /opt/ssl</span><br><span class="line"><span class="built_in">cd</span> /opt/ssl</span><br><span class="line">cat &lt;&lt;EOF &gt; config.json</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"signing"</span>: &#123;</span><br><span class="line">    <span class="string">"default"</span>: &#123;</span><br><span class="line">      <span class="string">"expiry"</span>: <span class="string">"87600h"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"profiles"</span>: &#123;</span><br><span class="line">      <span class="string">"kubernetes"</span>: &#123;</span><br><span class="line">        <span class="string">"usages"</span>: [</span><br><span class="line">            <span class="string">"signing"</span>,</span><br><span class="line">            <span class="string">"key encipherment"</span>,</span><br><span class="line">            <span class="string">"server auth"</span>,</span><br><span class="line">            <span class="string">"client auth"</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="string">"expiry"</span>: <span class="string">"87600h"</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">cat &lt;&lt;EOF &gt; csr.json</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"CN"</span>: <span class="string">"kubernetes"</span>,</span><br><span class="line">  <span class="string">"key"</span>: &#123;</span><br><span class="line">    <span class="string">"algo"</span>: <span class="string">"rsa"</span>,</span><br><span class="line">    <span class="string">"size"</span>: 2048</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"names"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">"C"</span>: <span class="string">"CN"</span>,</span><br><span class="line">      <span class="string">"ST"</span>: <span class="string">"Chongqing"</span>,</span><br><span class="line">      <span class="string">"L"</span>: <span class="string">"Chongqing"</span>,</span><br><span class="line">      <span class="string">"O"</span>: <span class="string">"k8s"</span>,</span><br><span class="line">      <span class="string">"OU"</span>: <span class="string">"System"</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">/opt/<span class="built_in">local</span>/cfssl/cfssl gencert -initca csr.json | /opt/<span class="built_in">local</span>/cfssl/cfssljson -bare ca</span><br><span class="line"></span><br><span class="line">mkdir -p /etc/kubernetes/ssl</span><br><span class="line"></span><br><span class="line">cp *.pem /etc/kubernetes/ssl</span><br><span class="line">cp ca.csr /etc/kubernetes/ssl</span><br><span class="line"></span><br><span class="line">ssh root@node2 <span class="string">"mkdir -p /etc/kubernetes/ssl/"</span></span><br><span class="line">ssh root@node3 <span class="string">"mkdir -p /etc/kubernetes/ssl/"</span></span><br><span class="line"></span><br><span class="line">scp *.pem *.csr root@node2:/etc/kubernetes/ssl/</span><br><span class="line">scp *.pem *.csr root@node3:/etc/kubernetes/ssl/</span><br><span class="line"></span><br><span class="line"><span class="comment"># etcd</span></span><br><span class="line"><span class="built_in">cd</span> /opt/ssl</span><br><span class="line">cat &lt;&lt;EOF &gt; etcd-csr.json</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"CN"</span>: <span class="string">"etcd"</span>,</span><br><span class="line">  <span class="string">"hosts"</span>: [</span><br><span class="line">    <span class="string">"127.0.0.1"</span>,</span><br><span class="line">    <span class="string">"172.17.3.108"</span>,</span><br><span class="line">    <span class="string">"172.17.3.140"</span>,</span><br><span class="line">    <span class="string">"172.17.3.223"</span>,</span><br><span class="line">    <span class="string">"172.17.3.224"</span>,</span><br><span class="line">    <span class="string">"172.17.3.225"</span>,</span><br><span class="line">    <span class="string">"172.17.3.226"</span>,</span><br><span class="line">    <span class="string">"172.17.3.227"</span>,</span><br><span class="line">    <span class="string">"172.17.3.228"</span>,</span><br><span class="line">    <span class="string">"172.17.3.229"</span>,</span><br><span class="line">    <span class="string">"172.17.3.230"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"key"</span>: &#123;</span><br><span class="line">    <span class="string">"algo"</span>: <span class="string">"rsa"</span>,</span><br><span class="line">    <span class="string">"size"</span>: 2048</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"names"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">"C"</span>: <span class="string">"CN"</span>,</span><br><span class="line">      <span class="string">"ST"</span>: <span class="string">"Chongqing"</span>,</span><br><span class="line">      <span class="string">"L"</span>: <span class="string">"Chongqing"</span>,</span><br><span class="line">      <span class="string">"O"</span>: <span class="string">"k8s"</span>,</span><br><span class="line">      <span class="string">"OU"</span>: <span class="string">"System"</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">/opt/<span class="built_in">local</span>/cfssl/cfssl gencert -ca=/opt/ssl/ca.pem \</span><br><span class="line">    -ca-key=/opt/ssl/ca-key.pem \</span><br><span class="line">    -config=/opt/ssl/config.json \</span><br><span class="line">    -profile=kubernetes etcd-csr.json | /opt/<span class="built_in">local</span>/cfssl/cfssljson -bare etcd</span><br><span class="line"></span><br><span class="line">cp etcd*.pem /etc/kubernetes/ssl/</span><br><span class="line">chmod 644 /etc/kubernetes/ssl/etcd-key.pem</span><br><span class="line"></span><br><span class="line">scp etcd*.pem root@node2:/etc/kubernetes/ssl/</span><br><span class="line">ssh root@node2 <span class="string">"chmod 644 /etc/kubernetes/ssl/etcd-key.pem"</span></span><br><span class="line"></span><br><span class="line">scp etcd*.pem root@node3:/etc/kubernetes/ssl/</span><br><span class="line">ssh root@node3 <span class="string">"chmod 644 /etc/kubernetes/ssl/etcd-key.pem"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># admin</span></span><br><span class="line"><span class="built_in">cd</span> /opt/ssl</span><br><span class="line">cat &lt;&lt;EOF &gt; admin-csr.json</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"CN"</span>: <span class="string">"admin"</span>,</span><br><span class="line">  <span class="string">"hosts"</span>: [],</span><br><span class="line">  <span class="string">"key"</span>: &#123;</span><br><span class="line">    <span class="string">"algo"</span>: <span class="string">"rsa"</span>,</span><br><span class="line">    <span class="string">"size"</span>: 2048</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"names"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">"C"</span>: <span class="string">"CN"</span>,</span><br><span class="line">      <span class="string">"ST"</span>: <span class="string">"Chongqing"</span>,</span><br><span class="line">      <span class="string">"L"</span>: <span class="string">"Chongqing"</span>,</span><br><span class="line">      <span class="string">"O"</span>: <span class="string">"system:masters"</span>,</span><br><span class="line">      <span class="string">"OU"</span>: <span class="string">"System"</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">/opt/<span class="built_in">local</span>/cfssl/cfssl gencert -ca=/etc/kubernetes/ssl/ca.pem \</span><br><span class="line">    -ca-key=/etc/kubernetes/ssl/ca-key.pem \</span><br><span class="line">    -config=/opt/ssl/config.json \</span><br><span class="line">    -profile=kubernetes admin-csr.json | /opt/<span class="built_in">local</span>/cfssl/cfssljson -bare admin</span><br><span class="line"></span><br><span class="line">cp admin*.pem /etc/kubernetes/ssl/</span><br><span class="line">scp admin*.pem root@node2:/etc/kubernetes/ssl/</span><br><span class="line">scp admin*.pem root@node3:/etc/kubernetes/ssl/</span><br><span class="line"></span><br><span class="line"><span class="comment"># kuernetes 证书</span></span><br><span class="line"><span class="built_in">cd</span> /opt/ssl</span><br><span class="line">cat &lt;&lt;EOF &gt; kubernetes-csr.json</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"CN"</span>: <span class="string">"kubernetes"</span>,</span><br><span class="line">  <span class="string">"hosts"</span>: [</span><br><span class="line">    <span class="string">"127.0.0.1"</span>,</span><br><span class="line">    <span class="string">"172.17.3.108"</span>,</span><br><span class="line">    <span class="string">"172.17.3.140"</span>,</span><br><span class="line">    <span class="string">"172.17.3.223"</span>,</span><br><span class="line">    <span class="string">"10.254.0.1"</span>,</span><br><span class="line">    <span class="string">"kubernetes"</span>,</span><br><span class="line">    <span class="string">"kubernetes.default"</span>,</span><br><span class="line">    <span class="string">"kubernetes.default.svc"</span>,</span><br><span class="line">    <span class="string">"kubernetes.default.svc.cluster"</span>,</span><br><span class="line">    <span class="string">"kubernetes.default.svc.cluster.local"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"key"</span>: &#123;</span><br><span class="line">    <span class="string">"algo"</span>: <span class="string">"rsa"</span>,</span><br><span class="line">    <span class="string">"size"</span>: 2048</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"names"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">"C"</span>: <span class="string">"CN"</span>,</span><br><span class="line">      <span class="string">"ST"</span>: <span class="string">"Chongqing"</span>,</span><br><span class="line">      <span class="string">"L"</span>: <span class="string">"Chongqing"</span>,</span><br><span class="line">      <span class="string">"O"</span>: <span class="string">"k8s"</span>,</span><br><span class="line">      <span class="string">"OU"</span>: <span class="string">"System"</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="comment">## 这里 hosts 字段中 三个 IP 分别为 127.0.0.1 本机， 172.17.3.108 和 172.17.3.140 为 Master 的IP，多个Master需要写多个。  10.254.0.1 为 kubernetes SVC 的 IP， 一般是 部署网络的第一个IP , 如: 10.254.0.1 ， 在启动完成后，我们使用   kubectl get svc ， 就可以查看到</span></span><br><span class="line"></span><br><span class="line">/opt/<span class="built_in">local</span>/cfssl/cfssl gencert -ca=/etc/kubernetes/ssl/ca.pem \</span><br><span class="line">    -ca-key=/etc/kubernetes/ssl/ca-key.pem \</span><br><span class="line">    -config=/opt/ssl/config.json \</span><br><span class="line">    -profile=kubernetes kubernetes-csr.json | /opt/<span class="built_in">local</span>/cfssl/cfssljson -bare kubernetes</span><br><span class="line"></span><br><span class="line">cp kubernetes*.pem /etc/kubernetes/ssl/</span><br><span class="line"></span><br><span class="line">scp kubernetes*.pem root@node2:/etc/kubernetes/ssl/</span><br><span class="line"></span><br><span class="line">scp kubernetes*.pem root@node3:/etc/kubernetes/ssl/</span><br><span class="line"></span><br><span class="line"><span class="comment"># kube-proxy</span></span><br><span class="line"><span class="built_in">cd</span> /opt/ssl</span><br><span class="line">cat &lt;&lt;EOF &gt; kube-proxy-csr.json</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"CN"</span>: <span class="string">"system:kube-proxy"</span>,</span><br><span class="line">  <span class="string">"hosts"</span>: [],</span><br><span class="line">  <span class="string">"key"</span>: &#123;</span><br><span class="line">    <span class="string">"algo"</span>: <span class="string">"rsa"</span>,</span><br><span class="line">    <span class="string">"size"</span>: 2048</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="string">"names"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">"C"</span>: <span class="string">"CN"</span>,</span><br><span class="line">      <span class="string">"ST"</span>: <span class="string">"Chongqing"</span>,</span><br><span class="line">      <span class="string">"L"</span>: <span class="string">"Chongqing"</span>,</span><br><span class="line">      <span class="string">"O"</span>: <span class="string">"k8s"</span>,</span><br><span class="line">      <span class="string">"OU"</span>: <span class="string">"System"</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">/opt/<span class="built_in">local</span>/cfssl/cfssl gencert -ca=/etc/kubernetes/ssl/ca.pem \</span><br><span class="line">  -ca-key=/etc/kubernetes/ssl/ca-key.pem \</span><br><span class="line">  -config=/opt/ssl/config.json \</span><br><span class="line">  -profile=kubernetes  kube-proxy-csr.json | /opt/<span class="built_in">local</span>/cfssl/cfssljson -bare kube-proxy</span><br><span class="line"></span><br><span class="line">cp kube-proxy* /etc/kubernetes/ssl/</span><br><span class="line">scp kube-proxy* root@node2:/etc/kubernetes/ssl/</span><br><span class="line">scp kube-proxy* root@node3:/etc/kubernetes/ssl/</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="docker-each"><a href="#docker-each" class="headerlink" title="docker (each)"></a>docker (each)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install docker</span><br></pre></td></tr></table></figure>
+
+<h3 id="etcd-each"><a href="#etcd-each" class="headerlink" title="etcd (each)"></a>etcd (each)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /tmp/k8s-deps; <span class="built_in">cd</span> /tmp/k8s-deps; wget https://github.com/coreos/etcd/releases/download/v3.3.8/etcd-v3.3.8-linux-amd64.tar.gz</span><br><span class="line">ssh root@node2 <span class="string">"mkdir -p /tmp/k8s-deps; cd /tmp/k8s-deps; wget https://github.com/coreos/etcd/releases/download/v3.3.8/etcd-v3.3.8-linux-amd64.tar.gz"</span></span><br><span class="line">ssh root@node3 <span class="string">"mkdir -p /tmp/k8s-deps; cd /tmp/k8s-deps; wget https://github.com/coreos/etcd/releases/download/v3.3.8/etcd-v3.3.8-linux-amd64.tar.gz"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># etcd</span></span><br><span class="line"><span class="built_in">cd</span> /tmp/k8s-deps; tar zxf etcd-v3.3.8-linux-amd64.tar.gz; <span class="built_in">cd</span> etcd-v3.3.8-linux-amd64; mv etcd  etcdctl /usr/bin/</span><br><span class="line"></span><br><span class="line">ssh root@node2 <span class="string">"cd /tmp/k8s-deps; tar zxf etcd-v3.3.8-linux-amd64.tar.gz; cd etcd-v3.3.8-linux-amd64; mv etcd  etcdctl /usr/bin/"</span></span><br><span class="line">ssh root@node3 <span class="string">"cd /tmp/k8s-deps; tar zxf etcd-v3.3.8-linux-amd64.tar.gz; cd etcd-v3.3.8-linux-amd64; mv etcd  etcdctl /usr/bin/"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># etcd-1</span></span><br><span class="line">useradd etcd || <span class="literal">true</span>; mkdir -p /opt/etcd; chown -R etcd:etcd /opt/etcd</span><br><span class="line"><span class="comment"># etcd-2</span></span><br><span class="line">ssh root@node2 <span class="string">"useradd etcd || true; mkdir -p /opt/etcd; chown -R etcd:etcd /opt/etcd"</span></span><br><span class="line"><span class="comment"># etcd-3</span></span><br><span class="line">ssh root@node3 <span class="string">"useradd etcd || true; mkdir -p /opt/etcd; chown -R etcd:etcd /opt/etcd"</span></span><br><span class="line"></span><br><span class="line">cat &lt;&lt;EOF &gt; /etc/systemd/system/etcd.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Etcd Server</span><br><span class="line">After=network.target</span><br><span class="line">After=network-online.target</span><br><span class="line">Wants=network-online.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=notify</span><br><span class="line">WorkingDirectory=/opt/etcd/</span><br><span class="line">User=etcd</span><br><span class="line"><span class="comment"># set GOMAXPROCS to number of processors</span></span><br><span class="line">ExecStart=/usr/bin/etcd \\</span><br><span class="line">  --name=etcd1 \\</span><br><span class="line">  --cert-file=/etc/kubernetes/ssl/etcd.pem \\</span><br><span class="line">  --key-file=/etc/kubernetes/ssl/etcd-key.pem \\</span><br><span class="line">  --peer-cert-file=/etc/kubernetes/ssl/etcd.pem \\</span><br><span class="line">  --peer-key-file=/etc/kubernetes/ssl/etcd-key.pem \\</span><br><span class="line">  --trusted-ca-file=/etc/kubernetes/ssl/ca.pem \\</span><br><span class="line">  --peer-trusted-ca-file=/etc/kubernetes/ssl/ca.pem \\</span><br><span class="line">  --initial-advertise-peer-urls=https://172.17.3.108:2380 \\</span><br><span class="line">  --listen-peer-urls=https://172.17.3.108:2380 \\</span><br><span class="line">  --listen-client-urls=https://172.17.3.108:2379,http://127.0.0.1:2379 \\</span><br><span class="line">  --advertise-client-urls=https://172.17.3.108:2379 \\</span><br><span class="line">  --initial-cluster-token=k8s-etcd-cluster \\</span><br><span class="line">  --initial-cluster=etcd1=https://172.17.3.108:2380,etcd2=https://172.17.3.140:2380,etcd3=https://172.17.3.223:2380 \\</span><br><span class="line">  --initial-cluster-state=new \\</span><br><span class="line">  --data-dir=/opt/etcd/</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> /tmp/k8s-deps</span><br><span class="line">cat &lt;&lt;EOF &gt; etcd.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Etcd Server</span><br><span class="line">After=network.target</span><br><span class="line">After=network-online.target</span><br><span class="line">Wants=network-online.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=notify</span><br><span class="line">WorkingDirectory=/opt/etcd/</span><br><span class="line">User=etcd</span><br><span class="line"><span class="comment"># set GOMAXPROCS to number of processors</span></span><br><span class="line">ExecStart=/usr/bin/etcd \\</span><br><span class="line">  --name=etcd2 \\</span><br><span class="line">  --cert-file=/etc/kubernetes/ssl/etcd.pem \\</span><br><span class="line">  --key-file=/etc/kubernetes/ssl/etcd-key.pem \\</span><br><span class="line">  --peer-cert-file=/etc/kubernetes/ssl/etcd.pem \\</span><br><span class="line">  --peer-key-file=/etc/kubernetes/ssl/etcd-key.pem \\</span><br><span class="line">  --trusted-ca-file=/etc/kubernetes/ssl/ca.pem \\</span><br><span class="line">  --peer-trusted-ca-file=/etc/kubernetes/ssl/ca.pem \\</span><br><span class="line">  --initial-advertise-peer-urls=https://172.17.3.140:2380 \\</span><br><span class="line">  --listen-peer-urls=https://172.17.3.140:2380 \\</span><br><span class="line">  --listen-client-urls=https://172.17.3.140:2379,http://127.0.0.1:2379 \\</span><br><span class="line">  --advertise-client-urls=https://172.17.3.140:2379 \\</span><br><span class="line">  --initial-cluster-token=k8s-etcd-cluster \\</span><br><span class="line">  --initial-cluster=etcd1=https://172.17.3.108:2380,etcd2=https://172.17.3.140:2380,etcd3=https://172.17.3.223:2380 \\</span><br><span class="line">  --initial-cluster-state=new \\</span><br><span class="line">  --data-dir=/opt/etcd/</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line">scp etcd.service root@node2:/etc/systemd/system/</span><br><span class="line"></span><br><span class="line">cat &lt;&lt;EOF &gt; etcd.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Etcd Server</span><br><span class="line">After=network.target</span><br><span class="line">After=network-online.target</span><br><span class="line">Wants=network-online.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">Type=notify</span><br><span class="line">WorkingDirectory=/opt/etcd/</span><br><span class="line">User=etcd</span><br><span class="line"><span class="comment"># set GOMAXPROCS to number of processors</span></span><br><span class="line">ExecStart=/usr/bin/etcd \\</span><br><span class="line">  --name=etcd3 \\</span><br><span class="line">  --cert-file=/etc/kubernetes/ssl/etcd.pem \\</span><br><span class="line">  --key-file=/etc/kubernetes/ssl/etcd-key.pem \\</span><br><span class="line">  --peer-cert-file=/etc/kubernetes/ssl/etcd.pem \\</span><br><span class="line">  --peer-key-file=/etc/kubernetes/ssl/etcd-key.pem \\</span><br><span class="line">  --trusted-ca-file=/etc/kubernetes/ssl/ca.pem \\</span><br><span class="line">  --peer-trusted-ca-file=/etc/kubernetes/ssl/ca.pem \\</span><br><span class="line">  --initial-advertise-peer-urls=https://172.17.3.223:2380 \\</span><br><span class="line">  --listen-peer-urls=https://172.17.3.223:2380 \\</span><br><span class="line">  --listen-client-urls=https://172.17.3.223:2379,http://127.0.0.1:2379 \\</span><br><span class="line">  --advertise-client-urls=https://172.17.3.223:2379 \\</span><br><span class="line">  --initial-cluster-token=k8s-etcd-cluster \\</span><br><span class="line">  --initial-cluster=etcd1=https://172.17.3.108:2380,etcd2=https://172.17.3.140:2380,etcd3=https://172.17.3.223:2380 \\</span><br><span class="line">  --initial-cluster-state=new \\</span><br><span class="line">  --data-dir=/opt/etcd/</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line">scp etcd.service root@node3:/etc/systemd/system/</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"systemctl daemon-reload; systemctl enable etcd; systemctl start etcd; systemctl status etcd"</span> &gt; /tmp/init-etcd.sh &amp;&amp; <span class="built_in">cd</span> /tmp &amp;&amp; nohup sh init-etcd.sh 2&gt;&amp;1 &amp;</span><br><span class="line"></span><br><span class="line">ssh root@node2 <span class="string">"echo \"systemctl daemon-reload; systemctl enable etcd; systemctl start etcd; systemctl status etcd\" &gt; /tmp/init-etcd.sh &amp;&amp; cd /tmp &amp;&amp; nohup sh init-etcd.sh 2&gt;&amp;1 &amp;"</span></span><br><span class="line"></span><br><span class="line">ssh root@node3 <span class="string">"echo \"systemctl daemon-reload; systemctl enable etcd; systemctl start etcd; systemctl status etcd\" &gt; /tmp/init-etcd.sh &amp;&amp; cd /tmp &amp;&amp; nohup sh init-etcd.sh 2&gt;&amp;1 &amp;"</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="test-etcd"><a href="#test-etcd" class="headerlink" title="test etcd"></a>test etcd</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">etcdctl --endpoints=https://172.17.3.108:2379,https://172.17.3.140:2379,https://172.17.3.223:2379\</span><br><span class="line">        --cert-file=/etc/kubernetes/ssl/etcd.pem \</span><br><span class="line">        --ca-file=/etc/kubernetes/ssl/ca.pem \</span><br><span class="line">        --key-file=/etc/kubernetes/ssl/etcd-key.pem \</span><br><span class="line">        cluster-health</span><br></pre></td></tr></table></figure>
+
+<h3 id="master-and-node"><a href="#master-and-node" class="headerlink" title="master and node"></a>master and node</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br><span class="line">538</span><br><span class="line">539</span><br><span class="line">540</span><br><span class="line">541</span><br><span class="line">542</span><br><span class="line">543</span><br><span class="line">544</span><br><span class="line">545</span><br><span class="line">546</span><br><span class="line">547</span><br><span class="line">548</span><br><span class="line">549</span><br><span class="line">550</span><br><span class="line">551</span><br><span class="line">552</span><br><span class="line">553</span><br><span class="line">554</span><br><span class="line">555</span><br><span class="line">556</span><br><span class="line">557</span><br><span class="line">558</span><br><span class="line">559</span><br><span class="line">560</span><br><span class="line">561</span><br><span class="line">562</span><br><span class="line">563</span><br><span class="line">564</span><br><span class="line">565</span><br><span class="line">566</span><br><span class="line">567</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /tmp &amp;&amp; rm -rf kubernetes</span><br><span class="line">wget https://dl.k8s.io/v1.11.1/kubernetes-server-linux-amd64.tar.gz</span><br><span class="line">tar -xzvf kubernetes-server-linux-amd64.tar.gz; <span class="built_in">cd</span> kubernetes</span><br><span class="line">scp server/bin/&#123;kube-apiserver,kube-controller-manager,kube-scheduler,kubectl,kube-proxy,kubelet&#125; root@node1:/usr/<span class="built_in">local</span>/bin/</span><br><span class="line">scp server/bin/&#123;kube-apiserver,kube-controller-manager,kube-scheduler,kubectl,kube-proxy,kubelet&#125; root@node2:/usr/<span class="built_in">local</span>/bin/</span><br><span class="line">scp server/bin/&#123;kube-apiserver,kube-controller-manager,kube-scheduler,kubectl,kube-proxy,kubelet&#125; root@node3:/usr/<span class="built_in">local</span>/bin/</span><br><span class="line"></span><br><span class="line"><span class="comment"># api-server</span></span><br><span class="line">TOKEN=`head -c 16 /dev/urandom | od -An -t x | tr -d <span class="string">' '</span>`</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$TOKEN</span><span class="string">",kubelet-bootstrap,10001,\"system:bootstrappers\""</span> &gt; /etc/kubernetes/token.csv</span><br><span class="line">scp /etc/kubernetes/token.csv root@node2:/etc/kubernetes/</span><br><span class="line">scp /etc/kubernetes/token.csv root@node3:/etc/kubernetes/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成高级审核配置文件</span></span><br><span class="line"><span class="built_in">cd</span> /etc/kubernetes</span><br><span class="line">cat &lt;&lt;EOF &gt; audit-policy.yaml</span><br><span class="line"><span class="comment"># Log all requests at the Metadata level.</span></span><br><span class="line">apiVersion: audit.k8s.io/v1beta1</span><br><span class="line">kind: Policy</span><br><span class="line">rules:</span><br><span class="line">- level: Metadata</span><br><span class="line">EOF</span><br><span class="line">scp audit-policy.yaml root@node2:/etc/kubernetes/</span><br><span class="line">scp audit-policy.yaml root@node3:/etc/kubernetes/</span><br><span class="line"></span><br><span class="line"><span class="comment"># kube-apiserver.service</span></span><br><span class="line">cat &lt;&lt;EOF &gt; /etc/systemd/system/kube-apiserver.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Kubernetes API Server</span><br><span class="line">Documentation=https://github.com/GoogleCloudPlatform/kubernetes</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">User=root</span><br><span class="line">ExecStart=/usr/<span class="built_in">local</span>/bin/kube-apiserver \\</span><br><span class="line">  --admission-control=MutatingAdmissionWebhook,ValidatingAdmissionWebhook,NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota,NodeRestriction \\</span><br><span class="line">  --advertise-address=172.17.3.108 \\</span><br><span class="line">  --allow-privileged=<span class="literal">true</span> \\</span><br><span class="line">  --apiserver-count=3 \\</span><br><span class="line">  --audit-policy-file=/etc/kubernetes/audit-policy.yaml \\</span><br><span class="line">  --audit-log-maxage=30 \\</span><br><span class="line">  --audit-log-maxbackup=3 \\</span><br><span class="line">  --audit-log-maxsize=100 \\</span><br><span class="line">  --audit-log-path=/var/<span class="built_in">log</span>/kubernetes/audit.log \\</span><br><span class="line">  --authorization-mode=Node,RBAC \\</span><br><span class="line">  --<span class="built_in">bind</span>-address=0.0.0.0 \\</span><br><span class="line">  --secure-port=6443 \\</span><br><span class="line">  --client-ca-file=/etc/kubernetes/ssl/ca.pem \\</span><br><span class="line">  --<span class="built_in">enable</span>-swagger-ui=<span class="literal">true</span> \\</span><br><span class="line">  --etcd-cafile=/etc/kubernetes/ssl/ca.pem \\</span><br><span class="line">  --etcd-certfile=/etc/kubernetes/ssl/etcd.pem \\</span><br><span class="line">  --etcd-keyfile=/etc/kubernetes/ssl/etcd-key.pem \\</span><br><span class="line">  --etcd-servers=https://172.17.3.108:2379,https://172.17.3.140:2379,https://172.17.3.223:2379 \\</span><br><span class="line">  --event-ttl=1h \\</span><br><span class="line">  --kubelet-https=<span class="literal">true</span> \\</span><br><span class="line">  --insecure-bind-address=127.0.0.1 \\</span><br><span class="line">  --insecure-port=8080 \\</span><br><span class="line">  --service-account-key-file=/etc/kubernetes/ssl/ca-key.pem \\</span><br><span class="line">  --service-cluster-ip-range=10.254.0.0/18 \\</span><br><span class="line">  --service-node-port-range=1-65535 \\</span><br><span class="line">  --tls-cert-file=/etc/kubernetes/ssl/kubernetes.pem \\</span><br><span class="line">  --tls-private-key-file=/etc/kubernetes/ssl/kubernetes-key.pem \\</span><br><span class="line">  --<span class="built_in">enable</span>-bootstrap-token-auth \\</span><br><span class="line">  --token-auth-file=/etc/kubernetes/token.csv \\</span><br><span class="line">  --v=1</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line">Type=notify</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="comment"># k8s 1.8 开始需要 添加 --authorization-mode=Node</span></span><br><span class="line"><span class="comment"># k8s 1.8 开始需要 添加 --admission-control=NodeRestriction</span></span><br><span class="line"><span class="comment"># k8s 1.8 开始需要 添加 --audit-policy-file=/etc/kubernetes/audit-policy.yaml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这里面要注意的是 --service-node-port-range=30000-32000</span></span><br><span class="line"><span class="comment"># 这个地方是 映射外部端口时 的端口范围，随机映射也在这个范围内映射，指定映射端口必须也在这个范围内。</span></span><br><span class="line"></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl <span class="built_in">enable</span> kube-apiserver</span><br><span class="line">systemctl start kube-apiserver</span><br><span class="line">systemctl status kube-apiserver</span><br><span class="line"></span><br><span class="line"><span class="comment">## for node2</span></span><br><span class="line">cat &lt;&lt;EOF &gt; /tmp/kube-apiserver.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Kubernetes API Server</span><br><span class="line">Documentation=https://github.com/GoogleCloudPlatform/kubernetes</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">User=root</span><br><span class="line">ExecStart=/usr/<span class="built_in">local</span>/bin/kube-apiserver \\</span><br><span class="line">  --admission-control=MutatingAdmissionWebhook,ValidatingAdmissionWebhook,NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota,NodeRestriction \\</span><br><span class="line">  --advertise-address=172.17.3.140 \\</span><br><span class="line">  --allow-privileged=<span class="literal">true</span> \\</span><br><span class="line">  --apiserver-count=3 \\</span><br><span class="line">  --audit-policy-file=/etc/kubernetes/audit-policy.yaml \\</span><br><span class="line">  --audit-log-maxage=30 \\</span><br><span class="line">  --audit-log-maxbackup=3 \\</span><br><span class="line">  --audit-log-maxsize=100 \\</span><br><span class="line">  --audit-log-path=/var/<span class="built_in">log</span>/kubernetes/audit.log \\</span><br><span class="line">  --authorization-mode=Node,RBAC \\</span><br><span class="line">  --<span class="built_in">bind</span>-address=0.0.0.0 \\</span><br><span class="line">  --secure-port=6443 \\</span><br><span class="line">  --client-ca-file=/etc/kubernetes/ssl/ca.pem \\</span><br><span class="line">  --<span class="built_in">enable</span>-swagger-ui=<span class="literal">true</span> \\</span><br><span class="line">  --etcd-cafile=/etc/kubernetes/ssl/ca.pem \\</span><br><span class="line">  --etcd-certfile=/etc/kubernetes/ssl/etcd.pem \\</span><br><span class="line">  --etcd-keyfile=/etc/kubernetes/ssl/etcd-key.pem \\</span><br><span class="line">  --etcd-servers=https://172.17.3.108:2379,https://172.17.3.140:2379,https://172.17.3.223:2379 \\</span><br><span class="line">  --event-ttl=1h \\</span><br><span class="line">  --kubelet-https=<span class="literal">true</span> \\</span><br><span class="line">  --insecure-bind-address=127.0.0.1 \\</span><br><span class="line">  --insecure-port=8080 \\</span><br><span class="line">  --service-account-key-file=/etc/kubernetes/ssl/ca-key.pem \\</span><br><span class="line">  --service-cluster-ip-range=10.254.0.0/18 \\</span><br><span class="line">  --service-node-port-range=1-65535 \\</span><br><span class="line">  --tls-cert-file=/etc/kubernetes/ssl/kubernetes.pem \\</span><br><span class="line">  --tls-private-key-file=/etc/kubernetes/ssl/kubernetes-key.pem \\</span><br><span class="line">  --<span class="built_in">enable</span>-bootstrap-token-auth \\</span><br><span class="line">  --token-auth-file=/etc/kubernetes/token.csv \\</span><br><span class="line">  --v=1</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line">Type=notify</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">scp /tmp/kube-apiserver.service root@node2:/etc/systemd/system/</span><br><span class="line">ssh root@node2 <span class="string">"systemctl daemon-reload; systemctl enable kube-apiserver; systemctl start kube-apiserver; systemctl status kube-apiserver"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## for node3</span></span><br><span class="line">cat &lt;&lt;EOF &gt; /tmp/kube-apiserver.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Kubernetes API Server</span><br><span class="line">Documentation=https://github.com/GoogleCloudPlatform/kubernetes</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">User=root</span><br><span class="line">ExecStart=/usr/<span class="built_in">local</span>/bin/kube-apiserver \\</span><br><span class="line">  --admission-control=MutatingAdmissionWebhook,ValidatingAdmissionWebhook,NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota,NodeRestriction \\</span><br><span class="line">  --advertise-address=172.17.3.223 \\</span><br><span class="line">  --allow-privileged=<span class="literal">true</span> \\</span><br><span class="line">  --apiserver-count=3 \\</span><br><span class="line">  --audit-policy-file=/etc/kubernetes/audit-policy.yaml \\</span><br><span class="line">  --audit-log-maxage=30 \\</span><br><span class="line">  --audit-log-maxbackup=3 \\</span><br><span class="line">  --audit-log-maxsize=100 \\</span><br><span class="line">  --audit-log-path=/var/<span class="built_in">log</span>/kubernetes/audit.log \\</span><br><span class="line">  --authorization-mode=Node,RBAC \\</span><br><span class="line">  --<span class="built_in">bind</span>-address=0.0.0.0 \\</span><br><span class="line">  --secure-port=6443 \\</span><br><span class="line">  --client-ca-file=/etc/kubernetes/ssl/ca.pem \\</span><br><span class="line">  --<span class="built_in">enable</span>-swagger-ui=<span class="literal">true</span> \\</span><br><span class="line">  --etcd-cafile=/etc/kubernetes/ssl/ca.pem \\</span><br><span class="line">  --etcd-certfile=/etc/kubernetes/ssl/etcd.pem \\</span><br><span class="line">  --etcd-keyfile=/etc/kubernetes/ssl/etcd-key.pem \\</span><br><span class="line">  --etcd-servers=https://172.17.3.108:2379,https://172.17.3.140:2379,https://172.17.3.223:2379 \\</span><br><span class="line">  --event-ttl=1h \\</span><br><span class="line">  --kubelet-https=<span class="literal">true</span> \\</span><br><span class="line">  --insecure-bind-address=127.0.0.1 \\</span><br><span class="line">  --insecure-port=8080 \\</span><br><span class="line">  --service-account-key-file=/etc/kubernetes/ssl/ca-key.pem \\</span><br><span class="line">  --service-cluster-ip-range=10.254.0.0/18 \\</span><br><span class="line">  --service-node-port-range=1-65535 \\</span><br><span class="line">  --tls-cert-file=/etc/kubernetes/ssl/kubernetes.pem \\</span><br><span class="line">  --tls-private-key-file=/etc/kubernetes/ssl/kubernetes-key.pem \\</span><br><span class="line">  --<span class="built_in">enable</span>-bootstrap-token-auth \\</span><br><span class="line">  --token-auth-file=/etc/kubernetes/token.csv \\</span><br><span class="line">  --v=1</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line">Type=notify</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">scp /tmp/kube-apiserver.service root@node3:/etc/systemd/system/</span><br><span class="line">ssh root@node3 <span class="string">"systemctl daemon-reload; systemctl enable kube-apiserver; systemctl start kube-apiserver; systemctl status kube-apiserver"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># kube-controller-manager</span></span><br><span class="line"></span><br><span class="line">cat &lt;&lt;EOF &gt; /etc/systemd/system/kube-controller-manager.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Kubernetes Controller Manager</span><br><span class="line">Documentation=https://github.com/GoogleCloudPlatform/kubernetes</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/usr/<span class="built_in">local</span>/bin/kube-controller-manager \\</span><br><span class="line">  --address=0.0.0.0 \\</span><br><span class="line">  --master=http://127.0.0.1:8080 \\</span><br><span class="line">  --allocate-node-cidrs=<span class="literal">true</span> \\</span><br><span class="line">  --service-cluster-ip-range=10.254.0.0/18 \\</span><br><span class="line">  --cluster-cidr=10.254.64.0/18 \\</span><br><span class="line">  --cluster-signing-cert-file=/etc/kubernetes/ssl/ca.pem \\</span><br><span class="line">  --cluster-signing-key-file=/etc/kubernetes/ssl/ca-key.pem \\</span><br><span class="line">  --feature-gates=RotateKubeletServerCertificate=<span class="literal">true</span> \\</span><br><span class="line">  --experimental-cluster-signing-duration=86700h0m0s \\</span><br><span class="line">  --cluster-name=kubernetes \\</span><br><span class="line">  --service-account-private-key-file=/etc/kubernetes/ssl/ca-key.pem \\</span><br><span class="line">  --root-ca-file=/etc/kubernetes/ssl/ca.pem \\</span><br><span class="line">  --leader-elect=<span class="literal">true</span> \\</span><br><span class="line">  --node-monitor-grace-period=40s \\</span><br><span class="line">  --node-monitor-period=5s \\</span><br><span class="line">  --pod-eviction-timeout=5m0s \\</span><br><span class="line">  --v=2</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl <span class="built_in">enable</span> kube-controller-manager</span><br><span class="line">systemctl start kube-controller-manager</span><br><span class="line">systemctl status kube-controller-manager</span><br><span class="line"></span><br><span class="line">scp /etc/systemd/system/kube-controller-manager.service root@node2:/etc/systemd/system/</span><br><span class="line">ssh root@node2 <span class="string">"systemctl daemon-reload; systemctl enable kube-controller-manager; systemctl start kube-controller-manager; systemctl status kube-controller-manager"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># scheduler</span></span><br><span class="line">cat &lt;&lt;EOF &gt; /etc/systemd/system/kube-scheduler.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Kubernetes Scheduler</span><br><span class="line">Documentation=https://github.com/GoogleCloudPlatform/kubernetes</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">ExecStart=/usr/<span class="built_in">local</span>/bin/kube-scheduler \\</span><br><span class="line">  --address=0.0.0.0 \\</span><br><span class="line">  --master=http://127.0.0.1:8080 \\</span><br><span class="line">  --leader-elect=<span class="literal">true</span> \\</span><br><span class="line">  --v=1</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl <span class="built_in">enable</span> kube-scheduler</span><br><span class="line">systemctl start kube-scheduler</span><br><span class="line">systemctl status kube-scheduler</span><br><span class="line"></span><br><span class="line">scp /etc/systemd/system/kube-scheduler.service root@node2:/etc/systemd/system/</span><br><span class="line">ssh root@node2 <span class="string">"systemctl daemon-reload; systemctl enable kube-scheduler; systemctl start kube-scheduler; systemctl status kube-scheduler"</span></span><br><span class="line"></span><br><span class="line">kubectl get componentstatuses</span><br><span class="line"></span><br><span class="line">ssh root@node2 <span class="string">"kubectl get componentstatuses"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># kubelet</span></span><br><span class="line"><span class="built_in">cd</span></span><br><span class="line"><span class="comment"># 先创建认证请求, user 为 master 中 token.csv 文件里配置的用户</span></span><br><span class="line"><span class="comment"># 只需创建一次就可以</span></span><br><span class="line">kubectl create clusterrolebinding kubelet-bootstrap --clusterrole=system:node-bootstrapper --user=kubelet-bootstrap</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置集群</span></span><br><span class="line">kubectl config <span class="built_in">set</span>-cluster kubernetes \</span><br><span class="line">    --certificate-authority=/etc/kubernetes/ssl/ca.pem \</span><br><span class="line">    --embed-certs=<span class="literal">true</span> \</span><br><span class="line">    --server=https://172.17.3.108:6443 \</span><br><span class="line">    --kubeconfig=bootstrap.kubeconfig</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置客户端认证</span></span><br><span class="line">kubectl config <span class="built_in">set</span>-credentials kubelet-bootstrap \</span><br><span class="line">    --token=`cat /etc/kubernetes/token.csv | awk <span class="string">'&#123;split($0,a,",");print a[1]&#125;'</span>` \</span><br><span class="line">    --kubeconfig=bootstrap.kubeconfig</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置关联</span></span><br><span class="line">kubectl config <span class="built_in">set</span>-context default \</span><br><span class="line">    --cluster=kubernetes \</span><br><span class="line">    --user=kubelet-bootstrap \</span><br><span class="line">    --kubeconfig=bootstrap.kubeconfig</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置默认关联</span></span><br><span class="line">kubectl config use-context default --kubeconfig=bootstrap.kubeconfig</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拷贝生成的 bootstrap.kubeconfig 文件</span></span><br><span class="line">cp bootstrap.kubeconfig /etc/kubernetes/</span><br><span class="line"></span><br><span class="line">scp bootstrap.kubeconfig root@node2:/etc/kubernetes/</span><br><span class="line">scp bootstrap.kubeconfig root@node3:/etc/kubernetes/</span><br><span class="line"></span><br><span class="line"><span class="comment"># kubelet config</span></span><br><span class="line">mkdir -p /var/lib/kubelet</span><br><span class="line">ssh root@node2 <span class="string">"mkdir -p /var/lib/kubelet"</span></span><br><span class="line">ssh root@node3 <span class="string">"mkdir -p /var/lib/kubelet"</span></span><br><span class="line"></span><br><span class="line">cat &lt;&lt;EOF &gt; /etc/systemd/system/kubelet.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Kubernetes Kubelet</span><br><span class="line">Documentation=https://github.com/GoogleCloudPlatform/kubernetes</span><br><span class="line">After=docker.service</span><br><span class="line">Requires=docker.service</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">WorkingDirectory=/var/lib/kubelet</span><br><span class="line">ExecStart=/usr/<span class="built_in">local</span>/bin/kubelet \\</span><br><span class="line">  --cgroup-driver=cgroupfs \\</span><br><span class="line">  --hostname-override=node1 \\</span><br><span class="line">  --pod-infra-container-image=k8s.gcr.io/pause-amd64:3.1 \\</span><br><span class="line">  --experimental-bootstrap-kubeconfig=/etc/kubernetes/bootstrap.kubeconfig \\</span><br><span class="line">  --feature-gates=RotateKubeletClientCertificate=<span class="literal">true</span>,RotateKubeletServerCertificate=<span class="literal">true</span> \\</span><br><span class="line">  --kubeconfig=/etc/kubernetes/kubelet.kubeconfig \\</span><br><span class="line">  --cert-dir=/etc/kubernetes/ssl \\</span><br><span class="line">  --cluster_dns=10.254.0.2 \\</span><br><span class="line">  --cluster_domain=cluster.local. \\</span><br><span class="line">  --hairpin-mode promiscuous-bridge \\</span><br><span class="line">  --allow-privileged=<span class="literal">true</span> \\</span><br><span class="line">  --fail-swap-on=<span class="literal">false</span> \\</span><br><span class="line">  --serialize-image-pulls=<span class="literal">false</span> \\</span><br><span class="line">  --logtostderr=<span class="literal">true</span> \\</span><br><span class="line">  --max-pods=512 \\</span><br><span class="line">  --runtime-cgroups=/systemd/system.slice \\</span><br><span class="line">  --kubelet-cgroups=/systemd/system.slice \\</span><br><span class="line">  --v=2</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如上配置:</span></span><br><span class="line"><span class="comment"># node1            本机hostname</span></span><br><span class="line"><span class="comment"># 10.254.0.2       预分配的 dns 地址</span></span><br><span class="line"><span class="comment"># cluster.local.   为 kubernetes 集群的 domain</span></span><br><span class="line"><span class="comment"># k8s.gcr.io/pause-amd64:3.1  这个是 pod 的基础镜像</span></span><br><span class="line"></span><br><span class="line">systemctl daemon-reload; systemctl <span class="built_in">enable</span> kubelet; systemctl start kubelet; systemctl status kubelet</span><br><span class="line"></span><br><span class="line">cat &lt;&lt;EOF &gt; /tmp/kubelet.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Kubernetes Kubelet</span><br><span class="line">Documentation=https://github.com/GoogleCloudPlatform/kubernetes</span><br><span class="line">After=docker.service</span><br><span class="line">Requires=docker.service</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">WorkingDirectory=/var/lib/kubelet</span><br><span class="line">ExecStart=/usr/<span class="built_in">local</span>/bin/kubelet \\</span><br><span class="line">  --cgroup-driver=cgroupfs \\</span><br><span class="line">  --hostname-override=node2 \\</span><br><span class="line">  --pod-infra-container-image=k8s.gcr.io/pause-amd64:3.1 \\</span><br><span class="line">  --experimental-bootstrap-kubeconfig=/etc/kubernetes/bootstrap.kubeconfig \\</span><br><span class="line">  --feature-gates=RotateKubeletClientCertificate=<span class="literal">true</span>,RotateKubeletServerCertificate=<span class="literal">true</span> \\</span><br><span class="line">  --kubeconfig=/etc/kubernetes/kubelet.kubeconfig \\</span><br><span class="line">  --cert-dir=/etc/kubernetes/ssl \\</span><br><span class="line">  --cluster_dns=10.254.0.2 \\</span><br><span class="line">  --cluster_domain=cluster.local. \\</span><br><span class="line">  --hairpin-mode promiscuous-bridge \\</span><br><span class="line">  --allow-privileged=<span class="literal">true</span> \\</span><br><span class="line">  --fail-swap-on=<span class="literal">false</span> \\</span><br><span class="line">  --serialize-image-pulls=<span class="literal">false</span> \\</span><br><span class="line">  --logtostderr=<span class="literal">true</span> \\</span><br><span class="line">  --max-pods=512 \\</span><br><span class="line">  --runtime-cgroups=/systemd/system.slice \\</span><br><span class="line">  --kubelet-cgroups=/systemd/system.slice \\</span><br><span class="line">  --v=2</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line">scp /tmp/kubelet.service root@node2:/etc/systemd/system/</span><br><span class="line">ssh root@node2 <span class="string">"systemctl daemon-reload; systemctl enable kubelet; systemctl start kubelet; systemctl status kubelet"</span></span><br><span class="line"></span><br><span class="line">cat &lt;&lt;EOF &gt; /tmp/kubelet.service</span><br><span class="line">[Unit]</span><br><span class="line">Description=Kubernetes Kubelet</span><br><span class="line">Documentation=https://github.com/GoogleCloudPlatform/kubernetes</span><br><span class="line">After=docker.service</span><br><span class="line">Requires=docker.service</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">WorkingDirectory=/var/lib/kubelet</span><br><span class="line">ExecStart=/usr/<span class="built_in">local</span>/bin/kubelet \\</span><br><span class="line">  --cgroup-driver=cgroupfs \\</span><br><span class="line">  --hostname-override=node3 \\</span><br><span class="line">  --pod-infra-container-image=k8s.gcr.io/pause-amd64:3.1 \\</span><br><span class="line">  --experimental-bootstrap-kubeconfig=/etc/kubernetes/bootstrap.kubeconfig \\</span><br><span class="line">  --feature-gates=RotateKubeletClientCertificate=<span class="literal">true</span>,RotateKubeletServerCertificate=<span class="literal">true</span> \\</span><br><span class="line">  --kubeconfig=/etc/kubernetes/kubelet.kubeconfig \\</span><br><span class="line">  --cert-dir=/etc/kubernetes/ssl \\</span><br><span class="line">  --cluster_dns=10.254.0.2 \\</span><br><span class="line">  --cluster_domain=cluster.local. \\</span><br><span class="line">  --hairpin-mode promiscuous-bridge \\</span><br><span class="line">  --allow-privileged=<span class="literal">true</span> \\</span><br><span class="line">  --fail-swap-on=<span class="literal">false</span> \\</span><br><span class="line">  --serialize-image-pulls=<span class="literal">false</span> \\</span><br><span class="line">  --logtostderr=<span class="literal">true</span> \\</span><br><span class="line">  --max-pods=512 \\</span><br><span class="line">  --runtime-cgroups=/systemd/system.slice \\</span><br><span class="line">  --kubelet-cgroups=/systemd/system.slice \\</span><br><span class="line">  --v=2</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line">scp /tmp/kubelet.service root@node3:/etc/systemd/system/</span><br><span class="line">ssh root@node3 <span class="string">"systemctl daemon-reload; systemctl enable kubelet; systemctl start kubelet; systemctl status kubelet"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># find all csrs and approve them</span></span><br><span class="line">kubectl get csr | grep -v NAME | awk <span class="string">'&#123;print $1&#125;'</span> | xargs kubectl certificate approve </span><br><span class="line"></span><br><span class="line"><span class="comment"># kube-proxy</span></span><br><span class="line"><span class="comment"># 配置3台主节点, server都传的本地127.0.0.1</span></span><br><span class="line"><span class="comment"># 配置集群</span></span><br><span class="line">kubectl config <span class="built_in">set</span>-cluster kubernetes \</span><br><span class="line">  --certificate-authority=/etc/kubernetes/ssl/ca.pem \</span><br><span class="line">  --embed-certs=<span class="literal">true</span> \</span><br><span class="line">  --server=https://127.0.0.1:6443 \</span><br><span class="line">  --kubeconfig=kube-proxy.kubeconfig</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置客户端认证</span></span><br><span class="line">kubectl config <span class="built_in">set</span>-credentials kube-proxy \</span><br><span class="line">  --client-certificate=/etc/kubernetes/ssl/kube-proxy.pem \</span><br><span class="line">  --client-key=/etc/kubernetes/ssl/kube-proxy-key.pem \</span><br><span class="line">  --embed-certs=<span class="literal">true</span> \</span><br><span class="line">  --kubeconfig=kube-proxy.kubeconfig</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置关联</span></span><br><span class="line">kubectl config <span class="built_in">set</span>-context default \</span><br><span class="line">  --cluster=kubernetes \</span><br><span class="line">  --user=kube-proxy \</span><br><span class="line">  --kubeconfig=kube-proxy.kubeconfig</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置默认关联</span></span><br><span class="line">kubectl config use-context default --kubeconfig=kube-proxy.kubeconfig</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拷贝到需要的 node 端里</span></span><br><span class="line">scp kube-proxy.kubeconfig root@node1:/etc/kubernetes/</span><br><span class="line">scp kube-proxy.kubeconfig root@node2:/etc/kubernetes/</span><br><span class="line">scp kube-proxy.kubeconfig root@node3:/etc/kubernetes/</span><br><span class="line"></span><br><span class="line">mkdir -p /var/lib/kube-proxy</span><br><span class="line">ssh root@node2 <span class="string">"mkdir -p /var/lib/kube-proxy"</span></span><br><span class="line">ssh root@node3 <span class="string">"mkdir -p /var/lib/kube-proxy"</span></span><br><span class="line"></span><br><span class="line">cat &lt;&lt;EOF &gt; /etc/systemd/system/kube-proxy.service</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=Kubernetes Kube-Proxy Server</span><br><span class="line">Documentation=https://github.com/GoogleCloudPlatform/kubernetes</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">WorkingDirectory=/var/lib/kube-proxy</span><br><span class="line">ExecStart=/usr/<span class="built_in">local</span>/bin/kube-proxy \\</span><br><span class="line">  --<span class="built_in">bind</span>-address=172.17.3.108 \\</span><br><span class="line">  --hostname-override=node1 \\</span><br><span class="line">  --cluster-cidr=10.254.64.0/18 \\</span><br><span class="line">  --masquerade-all \\</span><br><span class="line">  --proxy-mode=ipvs \\</span><br><span class="line">  --ipvs-min-sync-period=5s \\</span><br><span class="line">  --ipvs-sync-period=5s \\</span><br><span class="line">  --ipvs-scheduler=rr \\</span><br><span class="line">  --kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig \\</span><br><span class="line">  --logtostderr=<span class="literal">true</span> \\</span><br><span class="line">  --v=1</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">cat &lt;&lt;EOF &gt; /tmp/kube-proxy.service</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=Kubernetes Kube-Proxy Server</span><br><span class="line">Documentation=https://github.com/GoogleCloudPlatform/kubernetes</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">WorkingDirectory=/var/lib/kube-proxy</span><br><span class="line">ExecStart=/usr/<span class="built_in">local</span>/bin/kube-proxy \\</span><br><span class="line">  --<span class="built_in">bind</span>-address=172.17.3.140 \\</span><br><span class="line">  --hostname-override=node2 \\</span><br><span class="line">  --cluster-cidr=10.254.64.0/18 \\</span><br><span class="line">  --masquerade-all \\</span><br><span class="line">  --proxy-mode=ipvs \\</span><br><span class="line">  --ipvs-min-sync-period=5s \\</span><br><span class="line">  --ipvs-sync-period=5s \\</span><br><span class="line">  --ipvs-scheduler=rr \\</span><br><span class="line">  --kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig \\</span><br><span class="line">  --logtostderr=<span class="literal">true</span> \\</span><br><span class="line">  --v=1</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">scp /tmp/kube-proxy.service root@node2:/etc/systemd/system/</span><br><span class="line"></span><br><span class="line">cat &lt;&lt;EOF &gt; /tmp/kube-proxy.service</span><br><span class="line"></span><br><span class="line">[Unit]</span><br><span class="line">Description=Kubernetes Kube-Proxy Server</span><br><span class="line">Documentation=https://github.com/GoogleCloudPlatform/kubernetes</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line">[Service]</span><br><span class="line">WorkingDirectory=/var/lib/kube-proxy</span><br><span class="line">ExecStart=/usr/<span class="built_in">local</span>/bin/kube-proxy \\</span><br><span class="line">  --<span class="built_in">bind</span>-address=172.17.3.223 \\</span><br><span class="line">  --hostname-override=node3 \\</span><br><span class="line">  --cluster-cidr=10.254.64.0/18 \\</span><br><span class="line">  --masquerade-all \\</span><br><span class="line">  --proxy-mode=ipvs \\</span><br><span class="line">  --ipvs-min-sync-period=5s \\</span><br><span class="line">  --ipvs-sync-period=5s \\</span><br><span class="line">  --ipvs-scheduler=rr \\</span><br><span class="line">  --kubeconfig=/etc/kubernetes/kube-proxy.kubeconfig \\</span><br><span class="line">  --logtostderr=<span class="literal">true</span> \\</span><br><span class="line">  --v=1</span><br><span class="line">Restart=on-failure</span><br><span class="line">RestartSec=5</span><br><span class="line">LimitNOFILE=65536</span><br><span class="line"></span><br><span class="line">[Install]</span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">scp /tmp/kube-proxy.service root@node3:/etc/systemd/system/</span><br><span class="line"></span><br><span class="line">ssh root@node1 <span class="string">"mkdir -p /var/lib/kube-proxy"</span></span><br><span class="line">ssh root@node2 <span class="string">"mkdir -p /var/lib/kube-proxy"</span></span><br><span class="line">ssh root@node3 <span class="string">"mkdir -p /var/lib/kube-proxy"</span></span><br><span class="line"></span><br><span class="line">ssh root@node1 <span class="string">"systemctl daemon-reload; systemctl enable kube-proxy; systemctl start kube-proxy; systemctl status kube-proxy"</span></span><br><span class="line">ssh root@node2 <span class="string">"systemctl daemon-reload; systemctl enable kube-proxy; systemctl start kube-proxy; systemctl status kube-proxy"</span></span><br><span class="line">ssh root@node3 <span class="string">"systemctl daemon-reload; systemctl enable kube-proxy; systemctl start kube-proxy; systemctl status kube-proxy"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">apiVersion: kubeproxy.config.k8s.io/v1alpha1</span><br><span class="line">bindAddress: 172.17.3.223</span><br><span class="line">clientConnection:</span><br><span class="line">  kubeconfig: /etc/kubernetes/kube-proxy.kubeconfig</span><br><span class="line">clusterCIDR: 10.254.64.0/18</span><br><span class="line">healthzBindAddress: 172.17.3.223:10256</span><br><span class="line">hostnameOverride: node3</span><br><span class="line">kind: KubeProxyConfiguration</span><br><span class="line">metricsBindAddress: 172.17.3.223:10249</span><br><span class="line">mode: <span class="string">"ipvs"</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Calico"><a href="#Calico" class="headerlink" title="Calico"></a>Calico</h3><ul>
+<li>wget <a href="https://docs.projectcalico.org/v3.6/getting-started/kubernetes/installation/hosted/calico.yaml" target="_blank" rel="noopener">https://docs.projectcalico.org/v3.6/getting-started/kubernetes/installation/hosted/calico.yaml</a></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 注意修改如下选项:</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># etcd 地址</span></span><br><span class="line"></span><br><span class="line">  etcd_endpoints: <span class="string">"https://172.17.3.108:2379,https://172.17.3.140:2379,https://172.17.3.223:2379"</span></span><br><span class="line">  </span><br><span class="line"><span class="comment"># etcd 证书路径</span></span><br><span class="line">  <span class="comment"># If you're using TLS enabled etcd uncomment the following.</span></span><br><span class="line">  <span class="comment"># You must also populate the Secret below with these files. </span></span><br><span class="line">    etcd_ca: <span class="string">"/calico-secrets/etcd-ca"</span>  </span><br><span class="line">    etcd_cert: <span class="string">"/calico-secrets/etcd-cert"</span></span><br><span class="line">    etcd_key: <span class="string">"/calico-secrets/etcd-key"</span>  </span><br><span class="line"></span><br><span class="line"><span class="comment"># etcd 证书 base64 地址 (执行里面的命令生成的证书 base64 码，填入里面)</span></span><br><span class="line"></span><br><span class="line">data:</span><br><span class="line">  etcd-key: (cat /etc/kubernetes/ssl/etcd-key.pem | base64 -w 0)</span><br><span class="line">  etcd-cert: (cat /etc/kubernetes/ssl/etcd.pem | base64 -w 0)</span><br><span class="line">  etcd-ca: (cat /etc/kubernetes/ssl/ca.pem | base64 -w 0)</span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line"><span class="comment"># 修改 pods 分配的 IP 段</span></span><br><span class="line"></span><br><span class="line">            - name: CALICO_IPV4POOL_CIDR</span><br><span class="line">              value: <span class="string">"10.254.64.0/18"</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>vi /etc/systemd/system/kubelet.service<br>–network-plugin=cni \<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重新加载配置</span></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart kubelet.service</span><br><span class="line">systemctl status kubelet.service</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="安装-calicoctl"><a href="#安装-calicoctl" class="headerlink" title="安装 calicoctl"></a>安装 calicoctl</h3><ul>
+<li>curl -O -L <a href="https://github.com/projectcalico/calicoctl/releases/download/v3.2.3/calicoctl" target="_blank" rel="noopener">https://github.com/projectcalico/calicoctl/releases/download/v3.2.3/calicoctl</a></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">``` </span><br><span class="line"></span><br><span class="line"><span class="comment">### flannel</span></span><br><span class="line">+ vi /usr/lib/systemd/system/docker.service</span><br><span class="line">```bash</span><br><span class="line">EnvironmentFile=/run/flannel/subnet.env</span><br><span class="line">ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock --bip=<span class="variable">$&#123;FLANNEL_SUBNET&#125;</span> --mtu=<span class="variable">$&#123;FLANNEL_MTU&#125;</span></span><br><span class="line"></span><br><span class="line">EnvironmentFile=-/run/flannel/docker</span><br><span class="line">ExecStart=/usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock <span class="variable">$DOCKER_NETWORK_OPTIONS</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">etcdctl --endpoints=https://172.17.3.108:2379,https://172.17.3.140:2379,https://172.17.3.223:2379\</span><br><span class="line">        --cert-file=/etc/kubernetes/ssl/etcd.pem \</span><br><span class="line">        --ca-file=/etc/kubernetes/ssl/ca.pem \</span><br><span class="line">        --key-file=/etc/kubernetes/ssl/etcd-key.pem \</span><br><span class="line">        <span class="built_in">set</span> /flannel/network/config \ <span class="string">'&#123;"Network":"10.254.64.0/18","SubnetLen":24,"Backend":&#123;"Type":"vxlan"&#125;&#125;'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># check</span></span><br><span class="line">etcdctl --endpoints=https://172.17.3.108:2379,https://172.17.3.140:2379,https://172.17.3.223:2379 \</span><br><span class="line">        --cert-file=/etc/kubernetes/ssl/etcd.pem \</span><br><span class="line">        --ca-file=/etc/kubernetes/ssl/ca.pem \</span><br><span class="line">        --key-file=/etc/kubernetes/ssl/etcd-key.pem \</span><br><span class="line">        get /flannel/network/config</span><br><span class="line"><span class="comment"># list</span></span><br><span class="line">etcdctl --endpoints=https://172.17.3.108:2379,https://172.17.3.140:2379,https://172.17.3.223:2379 \</span><br><span class="line">        --cert-file=/etc/kubernetes/ssl/etcd.pem \</span><br><span class="line">        --ca-file=/etc/kubernetes/ssl/ca.pem \</span><br><span class="line">        --key-file=/etc/kubernetes/ssl/etcd-key.pem \</span><br><span class="line">        ls /flannel/network/subnets</span><br><span class="line"></span><br><span class="line">rpm -ivh flannel-0.10.0-1.x86_64.rpm</span><br><span class="line"></span><br><span class="line">cat &lt;&lt;EOF &gt; /etc/sysconfig/flanneld</span><br><span class="line"><span class="comment"># Flanneld configuration options  </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># etcd url location.  Point this to the server where etcd runs</span></span><br><span class="line">FLANNEL_ETCD_ENDPOINTS=<span class="string">"https://172.17.3.108:2379,https://172.17.3.140:2379,https://172.17.3.223:2379"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># etcd config key.  This is the configuration key that flannel queries</span></span><br><span class="line"><span class="comment"># For address range assignment</span></span><br><span class="line">FLANNEL_ETCD_PREFIX=<span class="string">"/flannel/network"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Any additional options that you want to pass</span></span><br><span class="line"><span class="comment">#FLANNEL_OPTIONS=""</span></span><br><span class="line"></span><br><span class="line">FLANNEL_OPTIONS=<span class="string">"-ip-masq=true -etcd-cafile=/etc/kubernetes/ssl/ca.pem -etcd-certfile=/etc/kubernetes/ssl/etcd.pem -etcd-keyfile=/etc/kubernetes/ssl/etcd-key.pem -iface=eth0"</span></span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<h3 id="ingress"><a href="#ingress" class="headerlink" title="ingress"></a>ingress</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">curl -O https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/namespace.yaml</span><br><span class="line">curl -O https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/default-backend.yaml</span><br><span class="line">curl -O https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/configmap.yaml</span><br><span class="line">curl -O https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/tcp-services-configmap.yaml</span><br><span class="line">curl -O  https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/udp-services-configmap.yaml</span><br><span class="line">curl -O https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/rbac.yaml</span><br><span class="line"></span><br><span class="line">curl -O https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/with-rbac.yaml</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/namespace.yaml</span><br><span class="line">kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/default-backend.yaml</span><br><span class="line">kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/configmap.yaml</span><br><span class="line">kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/tcp-services-configmap.yaml</span><br><span class="line">kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/udp-services-configmap.yaml</span><br><span class="line"></span><br><span class="line"><span class="comment"># 部署 Ingress RBAC 认证</span></span><br><span class="line">kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/rbac.yaml</span><br><span class="line"></span><br><span class="line"><span class="comment"># 部署 Ingress Controller 组件</span></span><br><span class="line">kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/with-rbac.yaml</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h3><ul>
+<li><a href="https://jicki.me/kubernetes/2018/04/23/kubernetes-1.10.1.html" target="_blank" rel="noopener">k8s jicki</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://bililab.com/2020/02/11/k8s-install/" data-id="ck6hmrb5h00051bpfc2711czm" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-rook-ceph-debug" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/11/rook-ceph-debug/" class="article-date">
+  <time datetime="2020-02-11T14:15:45.000Z" itemprop="datePublished">2020-02-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/11/rook-ceph-debug/">rook-ceph debug</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>api/v1/minial 500</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ceph dashboard ac-role-create admin-no-iscsi</span><br><span class="line"></span><br><span class="line">for scope in dashboard-settings log rgw prometheus grafana nfs-ganesha manager hosts rbd-image config-opt rbd-mirroring cephfs user osd pool monitor; do</span><br><span class="line">    ceph dashboard ac-role-add-scope-perms admin-no-iscsi $&#123;scope&#125; create delete read update;</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">ceph dashboard ac-user-set-roles admin admin-no-iscsi</span><br></pre></td></tr></table></figure>
+
+
+<p>#redis-cluster</p>
+<p>kubectl -n redis exec -it redis-cluster-0 – redis-cli –cluster create –cluster-replicas 1 <br>$(kubectl -n redis get pods -l app=redis-cluster -o jsonpath=’{range.items[*]}{.status.podIP}:6379 ‘)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://bililab.com/2020/02/11/rook-ceph-debug/" data-id="ck6hmrb4u00031bpfgmosdr0o" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Bull-im接口文档" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/11/Bull-im%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/" class="article-date">
+  <time datetime="2020-02-11T14:14:56.000Z" itemprop="datePublished">2020-02-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/11/Bull-im%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/">Bull.im接口文档</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="接口地址"><a href="#接口地址" class="headerlink" title="接口地址"></a>接口地址</h3><blockquote>
+<p><a href="https://api.bull.im" target="_blank" rel="noopener">https://api.bull.im</a></p>
+</blockquote>
+<h3 id="接口统一header返回说明"><a href="#接口统一header返回说明" class="headerlink" title="接口统一header返回说明"></a>接口统一header返回说明</h3><table>
+<thead>
+<tr>
+<th align="center">header</th>
+<th align="left">说明</th>
+<th align="center">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">x-session</td>
+<td align="left">session值</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">x-csrf</td>
+<td align="left">csft token</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<h3 id="接口统一header请求说明"><a href="#接口统一header请求说明" class="headerlink" title="接口统一header请求说明"></a>接口统一header请求说明</h3><p><strong>主要公共参数:</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">header</th>
+<th align="left">说明</th>
+<th align="center">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">x-session</td>
+<td align="left">从header同名参数取</td>
+<td align="center">（可选）默认使用cookie</td>
+</tr>
+<tr>
+<td align="center">x-csrf</td>
+<td align="left">从header同名参数取</td>
+<td align="center">post请求必填，防止xss攻击</td>
+</tr>
+<tr>
+<td align="center">uid</td>
+<td align="left">用户id</td>
+<td align="center">(可选)</td>
+</tr>
+<tr>
+<td align="center">Locale</td>
+<td align="left">区域（86）</td>
+<td align="center">(可选)</td>
+</tr>
+<tr>
+<td align="center">TimeZone</td>
+<td align="left">时区（+8）</td>
+<td align="center">(可选)</td>
+</tr>
+<tr>
+<td align="center">Lang</td>
+<td align="left">语言（zh-CN）</td>
+<td align="center">(可选)</td>
+</tr>
+<tr>
+<td align="center">IP</td>
+<td align="left">ip(127.0.0.1)</td>
+<td align="center">(可选)</td>
+</tr>
+<tr>
+<td align="center">DevID</td>
+<td align="left">uuid</td>
+<td align="center">(可选)</td>
+</tr>
+<tr>
+<td align="center">Platform</td>
+<td align="left">“Android”,”iOS”,”Web”</td>
+<td align="center">必选</td>
+</tr>
+<tr>
+<td align="center">DevOS</td>
+<td align="left">windows,ios</td>
+<td align="center">必选</td>
+</tr>
+<tr>
+<td align="center">DevHW</td>
+<td align="left">{“cpu”:4,”gpu”:””,”mem”:”2GB”}</td>
+<td align="center">必选</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="统一消息说明"><a href="#统一消息说明" class="headerlink" title="统一消息说明"></a>统一消息说明</h3><p><strong>错误消息说明：</strong><br>success: http.statuscode == 200<br>failed: http.statuscode != 200</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;code&quot;: xxxxx, &#x2F;&#x2F;错误码</span><br><span class="line">    &quot;message&quot;:xxxx &#x2F;&#x2F;错误消息</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">	1001: &quot;verify captcha code fail&quot;,     &#x2F;&#x2F; 验证码错误</span><br><span class="line">	1002: &quot;need captcha code&quot;,            &#x2F;&#x2F; 需要验证码</span><br><span class="line">	1003: &quot;email&#x2F;sms verifycode fail&quot;,    &#x2F;&#x2F; 邮件&#x2F;sms验证码错误</span><br><span class="line">	1004: &quot;email&#x2F;sms verifycode timeout&quot;, &#x2F;&#x2F; 邮件&#x2F;sms验证码错误</span><br><span class="line">	1005: &quot;update error&quot;,                 &#x2F;&#x2F; 更新失败</span><br><span class="line">	1006: &quot;update success&quot;,               &#x2F;&#x2F; 更新成功</span><br><span class="line"></span><br><span class="line">	1101: &quot;user exist&quot;,            &#x2F;&#x2F; 该账号已经存在</span><br><span class="line">	1102: &quot;user not found&quot;,        &#x2F;&#x2F; 账号不存在</span><br><span class="line">	1103: &quot;user auth error&quot;,       &#x2F;&#x2F; 用户验证失败</span><br><span class="line">	1104: &quot;login failed&quot;,          &#x2F;&#x2F; 登录失败</span><br><span class="line">	1105: &quot;register failed&quot;,       &#x2F;&#x2F; 注册失败</span><br><span class="line">	1106: &quot;verify salt failed&quot;,    &#x2F;&#x2F;验证salt</span><br><span class="line">	1107: &quot;Username exists&quot;,       &#x2F;&#x2F;用户名存在</span><br><span class="line">	1108: &quot;Email exists&quot;,          &#x2F;&#x2F;邮箱存在</span><br><span class="line">	1109: &quot;Phone exists&quot;,          &#x2F;&#x2F;电话存在</span><br><span class="line">	1110: &quot;Send sms&#x2F;email failed&quot;, &#x2F;&#x2F;发送验证码失败</span><br><span class="line"></span><br><span class="line">	1201: &quot;2FA Has Enabled&quot;,    &#x2F;&#x2F; 2fa验证已经开启</span><br><span class="line">	1202: &quot;2FA Verify Fail&quot;,    &#x2F;&#x2F; 2fa验证失败</span><br><span class="line">	1203: &quot;2FA Bind Fail&quot;,      &#x2F;&#x2F; 2fa绑定失败</span><br><span class="line">	1204: &quot;2FA Has Disabled&quot;,   &#x2F;&#x2F; 2fa未开启</span><br><span class="line">	1205: &quot;2FA need&quot;,           &#x2F;&#x2F; 2fa需要验证</span><br><span class="line">	1206: &quot;Verify user need&quot;,   &#x2F;&#x2F; 验证用户需要</span><br><span class="line">	1207: &quot;Verify user failed&quot;, &#x2F;&#x2F; 严重用户失败</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所有post/put等接口都后续都会做频率验证码验证，一开始没有验证，但当触发后会返回1002错误码请求验证验证码。目前有几个接口默认有图片验证码</p>
+<p><strong>验证码参数:</strong><br>参数名称 | 类型 | 是否必须 | 说明<br>:—: | :—: | :—: | :—<br>generate_id|string| true| 20位长度<br>generate_code|string| true| 4位长度</p>
+<h3 id="1-请求图片验证码id"><a href="#1-请求图片验证码id" class="headerlink" title="1.请求图片验证码id"></a>1.请求图片验证码id</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>GET /v1/captcha/generate</p>
+</blockquote>
+<ul>
+<li><p><strong>请求参数</strong>: 无</p>
+</li>
+<li><p><strong>返回参数</strong>：</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;code&quot;: 200,</span><br><span class="line">    &quot;data&quot;: &#123;</span><br><span class="line">        &quot;generate_id&quot;: &quot;rbrQk24qJbykUDIw4kCr&quot;,</span><br><span class="line">        &quot;expire&quot;: 3600</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-获取验证码图片"><a href="#2-获取验证码图片" class="headerlink" title="2.获取验证码图片"></a>2.获取验证码图片</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>GET /v1/captcha/generate/${captcha_id}.png</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: 无</li>
+</ul>
+<h3 id="3-获取qrcode图片"><a href="#3-获取qrcode图片" class="headerlink" title="3.获取qrcode图片"></a>3.获取qrcode图片</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>GET /v1/qrcode?text=${otpauth}</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: 无</li>
+</ul>
+<h3 id="4-获取国家码"><a href="#4-获取国家码" class="headerlink" title="4.获取国家码"></a>4.获取国家码</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>GET /v1/tools/areas</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: 无</li>
+</ul>
+<h3 id="5-发送注册验证码"><a href="#5-发送注册验证码" class="headerlink" title="5.发送注册验证码"></a>5.发送注册验证码</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/register/start</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+</tbody></table>
+<h3 id="6-重新发送注册验证码"><a href="#6-重新发送注册验证码" class="headerlink" title="6.重新发送注册验证码"></a>6.重新发送注册验证码</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/register/start/vcode</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+</tbody></table>
+<h3 id="7-注册账号"><a href="#7-注册账号" class="headerlink" title="7.注册账号"></a>7.注册账号</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/register</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: 无</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+<tr>
+<td align="center">password</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(inputpassword+salt)</td>
+</tr>
+<tr>
+<td align="center">salt</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(code)</td>
+</tr>
+<tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+</tbody></table>
+<h3 id="8-登陆前获取账户信息（salt）"><a href="#8-登陆前获取账户信息（salt）" class="headerlink" title="8.登陆前获取账户信息（salt）"></a>8.登陆前获取账户信息（salt）</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>GET /v1/login/start</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>返回数据:</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;salt&quot;: &quot;xxxxx&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-账号密码登录-退出"><a href="#9-账号密码登录-退出" class="headerlink" title="9.账号密码登录/退出"></a>9.账号密码登录/退出</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/login 登录<br>GET /v1/logout 退出</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+<tr>
+<td align="center">password</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(inputpassword+salt)</td>
+</tr>
+<tr>
+<td align="center">salt</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="center">totp_code</td>
+<td align="center">string</td>
+<td align="center">falase</td>
+<td align="left">这是二次验证码需要以后开启后才有，登录时会提示输入验证码，那个时候再弹出二次验证输入框 加上这个字段后重新提交 可以参考big.one的二次验证弹窗</td>
+</tr>
+</tbody></table>
+<h3 id="10-验证码登陆发送验证码"><a href="#10-验证码登陆发送验证码" class="headerlink" title="10.验证码登陆发送验证码"></a>10.验证码登陆发送验证码</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/login/start/vcode</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+</tbody></table>
+<h3 id="11-验证码登陆"><a href="#11-验证码登陆" class="headerlink" title="11.验证码登陆"></a>11.验证码登陆</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/login/code</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+<tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+<tr>
+<td align="center">totp_code</td>
+<td align="center">string</td>
+<td align="center">falase</td>
+<td align="left">这是二次验证码需要以后开启后才有，登录时会提示输入验证码，那个时候再弹出二次验证输入框 加上这个字段后重新提交 可以参考big.one的二次验证弹窗</td>
+</tr>
+</tbody></table>
+<h3 id="12-找回密码前校验账号"><a href="#12-找回密码前校验账号" class="headerlink" title="12.找回密码前校验账号"></a>12.找回密码前校验账号</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/forget/password/start</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+</tbody></table>
+<h3 id="13-找回密码重新发送验证码"><a href="#13-找回密码重新发送验证码" class="headerlink" title="13.找回密码重新发送验证码"></a>13.找回密码重新发送验证码</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/forget/password/start/vcode</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+</tbody></table>
+<h3 id="14-找回密码重置密码"><a href="#14-找回密码重置密码" class="headerlink" title="14.找回密码重置密码"></a>14.找回密码重置密码</h3><ul>
+<li><strong>接口地址</strong> ：</li>
+</ul>
+<blockquote>
+<p>POST /v1/forget/password</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+<tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+<tr>
+<td align="center">salt</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(code)</td>
+</tr>
+<tr>
+<td align="center">password</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(inputpassword+salt)</td>
+</tr>
+</tbody></table>
+<h3 id="15-获取当前用户信息"><a href="#15-获取当前用户信息" class="headerlink" title="15.获取当前用户信息"></a>15.获取当前用户信息</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址</strong> ：</p>
+</li>
+</ul>
+<blockquote>
+<p>GET /v1/account/</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: 无</li>
+</ul>
+<h3 id="16-登录用户发送验证码"><a href="#16-登录用户发送验证码" class="headerlink" title="16.登录用户发送验证码"></a>16.登录用户发送验证码</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址</strong> ：</p>
+</li>
+</ul>
+<blockquote>
+<p>POST /v1/account/vcode</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">type</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">目前只有2个值email/phone</td>
+</tr>
+<tr>
+<td align="center">这个主要是登录用户修改一些东西需要验证码时发送验证码 发送验证码前tab让他选择验证方式 返回的用户信息里有phone_status,email_status表示对应可用状态。一般用什么方式注册默认这个状态就是true</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h3 id="17-通过密码修改密码"><a href="#17-通过密码修改密码" class="headerlink" title="17.通过密码修改密码"></a>17.通过密码修改密码</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址</strong> ：</p>
+</li>
+</ul>
+<blockquote>
+<p>POST /v1/account/reset/password</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">salt</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(code)这是新的salt</td>
+</tr>
+<tr>
+<td align="center">new_salt</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(code)这是新的salt</td>
+</tr>
+<tr>
+<td align="center">password</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(inputmassword+salt)</td>
+</tr>
+<tr>
+<td align="center">new_password</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(inputmassword+newsalt)</td>
+</tr>
+<tr>
+<td align="center">generate_id</td>
+<td align="center">string</td>
+<td align="center">false</td>
+<td align="left">20位长度(后期根据请求频率出现，默认不需要)</td>
+</tr>
+<tr>
+<td align="center">generate_code</td>
+<td align="center">string</td>
+<td align="center">false</td>
+<td align="left">6位长度(后期根据请求频率出现，默认不需要)</td>
+</tr>
+</tbody></table>
+<h3 id="18-通过发送验证码修改密码"><a href="#18-通过发送验证码修改密码" class="headerlink" title="18.通过发送验证码修改密码"></a>18.通过发送验证码修改密码</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址</strong> ：</p>
+</li>
+</ul>
+<blockquote>
+<p>POST /v1/account/reset/password/code</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">type</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">目前只有2个值email/phone，前面登录用户用什么方式发送的验证码这里就填什么</td>
+</tr>
+<tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+<tr>
+<td align="center">salt</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(code)</td>
+</tr>
+<tr>
+<td align="center">password</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">md5(inputpassword+salt)</td>
+</tr>
+</tbody></table>
+<h3 id="19-二次验证totp-获取qrcodeUrl-amp-amp-secret"><a href="#19-二次验证totp-获取qrcodeUrl-amp-amp-secret" class="headerlink" title="19.二次验证totp 获取qrcodeUrl&amp;&amp;secret"></a>19.二次验证totp 获取qrcodeUrl&amp;&amp;secret</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址</strong> ：</p>
+</li>
+</ul>
+<blockquote>
+<p>GET /v1/acccount/totp/start</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: 无</li>
+<li></li>
+<li><strong>返回数据:</strong></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;code&quot;: 200,</span><br><span class="line">    &quot;data&quot;: &#123;</span><br><span class="line">        &quot;otpauth&quot;: &quot;otpauth%3A%2F%2Ftotp%2FBULL.im%3A8615102366689%3Fissuer%3DBULL.im%26secret%3DHLBUICZJTZBPSBIK&quot;,</span><br><span class="line">        &quot;secret&quot;: &quot;HLBUICZJTZBPSBIK&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>optauth这个放到前面生成二维码的参数text 显示绑定二次验证的二维码<br>secret是密钥 用户自己保存好</p>
+</blockquote>
+<h3 id="20-二次验证开启"><a href="#20-二次验证开启" class="headerlink" title="20.二次验证开启"></a>20.二次验证开启</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址</strong> ：</p>
+</li>
+</ul>
+<blockquote>
+<p>POST /v1/account/totp/enable</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+</tbody></table>
+<h3 id="21-二次验证关闭"><a href="#21-二次验证关闭" class="headerlink" title="21.二次验证关闭"></a>21.二次验证关闭</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址:</strong> </p>
+</li>
+</ul>
+<blockquote>
+<p>POST /v1/accoount/totp/disable</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+</tbody></table>
+<h3 id="22-更新用户通用信息"><a href="#22-更新用户通用信息" class="headerlink" title="22.更新用户通用信息"></a>22.更新用户通用信息</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址:</strong> </p>
+</li>
+</ul>
+<blockquote>
+<p>PUT /v1/accoount</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">name</td>
+<td align="center">string</td>
+<td align="center">false</td>
+<td align="left">用户昵称</td>
+</tr>
+<tr>
+<td align="center">nation</td>
+<td align="center">string</td>
+<td align="center">false</td>
+<td align="left">国家地区</td>
+</tr>
+<tr>
+<td align="center">timezone</td>
+<td align="center">string</td>
+<td align="center">false</td>
+<td align="left">时区</td>
+</tr>
+<tr>
+<td align="center">avatar</td>
+<td align="center">string</td>
+<td align="center">false</td>
+<td align="left">头像图片地址</td>
+</tr>
+<tr>
+<td align="center">lang</td>
+<td align="center">string</td>
+<td align="center">false</td>
+<td align="left">语言</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>需要更新什么对应传对应的字段</p>
+</blockquote>
+<h3 id="23-登录用户修改邮箱和电话发送验证码后的验证码验证"><a href="#23-登录用户修改邮箱和电话发送验证码后的验证码验证" class="headerlink" title="23.登录用户修改邮箱和电话发送验证码后的验证码验证"></a>23.登录用户修改邮箱和电话发送验证码后的验证码验证</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址:</strong> </p>
+</li>
+</ul>
+<blockquote>
+<p>POST /v1/accoount/verify/code</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">type</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">目前只有2个值email/phone，前面登录用户用什么方式发送的验证码这里就填什么</td>
+</tr>
+<tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+</tbody></table>
+<h3 id="24-登录用户修改邮箱"><a href="#24-登录用户修改邮箱" class="headerlink" title="24.登录用户修改邮箱"></a>24.登录用户修改邮箱</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址:</strong> </p>
+</li>
+</ul>
+<blockquote>
+<p>PUT /v1/accoount/email</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+<tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>注意这里的账号验证码是新的    修改前的验证用前面的/account/vcode发送验证码和/account/verify/code验证验证码后才能在这里提交新账号修改</p>
+</blockquote>
+<h3 id="24-登录用户修改电话号码"><a href="#24-登录用户修改电话号码" class="headerlink" title="24.登录用户修改电话号码"></a>24.登录用户修改电话号码</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址:</strong> </p>
+</li>
+</ul>
+<blockquote>
+<p>PUT /v1/accoount/phone</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: </li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center">参数名称</th>
+<th align="center">类型</th>
+<th align="center">要求</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">account</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">phone: +86|15102366688 email: <a href="mailto:admin@bull.im">admin@bull.im</a></td>
+</tr>
+<tr>
+<td align="center">code</td>
+<td align="center">string</td>
+<td align="center">true</td>
+<td align="left">len(6)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>注意这里的账号验证码是新的    修改前的验证用前面的/account/vcode发送验证码和/account/verify/code验证验证码后才能在这里提交新账号修改</p>
+</blockquote>
+<h3 id="25-登录用户获取上传头像token"><a href="#25-登录用户获取上传头像token" class="headerlink" title="25.登录用户获取上传头像token"></a>25.登录用户获取上传头像token</h3><ul>
+<li><p><strong>登录用户:</strong> true</p>
+</li>
+<li><p><strong>接口地址:</strong> </p>
+</li>
+</ul>
+<blockquote>
+<p>GET /v1/accoount/upload/token</p>
+</blockquote>
+<ul>
+<li><strong>请求参数</strong>: 无</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://bililab.com/2020/02/11/Bull-im%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/" data-id="ck6hmrb5200041bpf4gwt0gfm" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Redis-Cluster" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/11/Redis-Cluster/" class="article-date">
+  <time datetime="2020-02-11T14:14:22.000Z" itemprop="datePublished">2020-02-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/11/Redis-Cluster/">Redis Cluster</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Redis-cluster"><a href="#Redis-cluster" class="headerlink" title="Redis cluster"></a>Redis cluster</h1><p>A <a href="https://redis.io/topics/cluster-tutorial" target="_blank" rel="noopener">redis cluster</a> running in Kubernetes.</p>
+<p>:warning: <strong>Note: this repository is no longer actively maintained. While it served as a nice example to run Redis Cluster in Kubernetes when I wrote it, there are currently more stable solutions to spin up a cluster. I recommend looking at community-built Kubernetes Operators for Redis, or an actively maintained Helm chart.</strong></p>
+<p>If the cluster configuration of a redis node is lost in some way, it will come back with a different ID, which upsets the balance in the cluster (and probably in the Force). To prevent this, the setup uses a combination of Kubernetes StatefulSets and PersistentVolumeClaims to make sure the state of the cluster is maintained after rescheduling or failures.</p>
+<h2 id="Setup"><a href="#Setup" class="headerlink" title="Setup"></a>Setup</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f redis-cluster.yml</span><br></pre></td></tr></table></figure>
+<p>This will spin up 6 <code>redis-cluster</code> pods one by one, which may take a while. After all pods are in a running state, you can itialize the cluster using the <code>redis-cli</code> in any of the pods. After the initialization, you will end up with 3 master and 3 slave nodes.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it redis-cluster-0 -- redis-cli --cluster create --cluster-replicas 1 \</span><br><span class="line">$(kubectl get pods -l app=redis-cluster -o jsonpath=<span class="string">'&#123;range.items[*]&#125;&#123;.status.podIP&#125;:6379 '</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="Adding-nodes"><a href="#Adding-nodes" class="headerlink" title="Adding nodes"></a>Adding nodes</h2><p>Adding nodes to the cluster involves a few manual steps. First, let’s add two nodes:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl scale statefulset redis-cluster --replicas=8</span><br></pre></td></tr></table></figure>
+
+<p>Have the first new node join the cluster as master:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> redis-cluster-0 -- redis-cli --cluster add-node \</span><br><span class="line">$(kubectl get pod redis-cluster-6 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379 \</span><br><span class="line">$(kubectl get pod redis-cluster-0 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379</span><br></pre></td></tr></table></figure>
+
+<p>The second new node should join the cluster as slave. This will automatically bind to the master with the least slaves (in this case, <code>redis-cluster-6</code>)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> redis-cluster-0 -- redis-cli --cluster add-node --cluster-slave \</span><br><span class="line">$(kubectl get pod redis-cluster-7 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379 \</span><br><span class="line">$(kubectl get pod redis-cluster-0 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379</span><br></pre></td></tr></table></figure>
+
+<p>Finally, automatically rebalance the masters:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> redis-cluster-0 -- redis-cli --cluster rebalance --cluster-use-empty-masters \</span><br><span class="line">$(kubectl get pod redis-cluster-0 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379</span><br></pre></td></tr></table></figure>
+
+<h2 id="Removing-nodes"><a href="#Removing-nodes" class="headerlink" title="Removing nodes"></a>Removing nodes</h2><h3 id="Removing-slaves"><a href="#Removing-slaves" class="headerlink" title="Removing slaves"></a>Removing slaves</h3><p>Slaves can be deleted safely. First, let’s get the id of the slave:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl <span class="built_in">exec</span> redis-cluster-7 -- redis-cli cluster nodes | grep myself</span><br><span class="line">3f7cbc0a7e0720e37fcb63a81dc6e2bf738c3acf 172.17.0.11:6379 myself,slave 32f250e02451352e561919674b8b705aef4dbdc6 0 0 0 connected</span><br></pre></td></tr></table></figure>
+
+<p>Then delete it:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> redis-cluster-0 -- redis-cli --cluster del-node \</span><br><span class="line">$(kubectl get pod redis-cluster-0 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379 \</span><br><span class="line">3f7cbc0a7e0720e37fcb63a81dc6e2bf738c3acf</span><br></pre></td></tr></table></figure>
+
+<h3 id="Removing-a-master"><a href="#Removing-a-master" class="headerlink" title="Removing a master"></a>Removing a master</h3><p>To remove master nodes from the cluster, we first have to move the slots used by them to the rest of the cluster, to avoid data loss.</p>
+<p>First, take note of the id of the master node we are removing:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl <span class="built_in">exec</span> redis-cluster-6 -- redis-cli cluster nodes | grep myself</span><br><span class="line">27259a4ae75c616bbde2f8e8c6dfab2c173f2a1d 172.17.0.10:6379 myself,master - 0 0 9 connected 0-1364 5461-6826 10923-12287</span><br></pre></td></tr></table></figure>
+
+<p>Also note the id of any other master node:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ kubectl <span class="built_in">exec</span> redis-cluster-6 -- redis-cli cluster nodes | grep master | grep -v myself</span><br><span class="line">32f250e02451352e561919674b8b705aef4dbdc6 172.17.0.4:6379 master - 0 1495120400893 2 connected 6827-10922</span><br><span class="line">2a42aec405aca15ec94a2470eadf1fbdd18e56c9 172.17.0.6:6379 master - 0 1495120398342 8 connected 12288-16383</span><br><span class="line">0990136c9a9d2e48ac7b36cfadcd9dbe657b2a72 172.17.0.2:6379 master - 0 1495120401395 1 connected 1365-5460</span><br></pre></td></tr></table></figure>
+
+<p>Then, use the <code>reshard</code> command to move all slots from <code>redis-cluster-6</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> redis-cluster-0 -- redis-cli --cluster reshard --cluster-yes \</span><br><span class="line">--cluster-from 27259a4ae75c616bbde2f8e8c6dfab2c173f2a1d \</span><br><span class="line">--cluster-to 32f250e02451352e561919674b8b705aef4dbdc6 \</span><br><span class="line">--cluster-slots 16384 \</span><br><span class="line">$(kubectl get pod redis-cluster-0 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379</span><br></pre></td></tr></table></figure>
+
+<p>After resharding, it is safe to delete the <code>redis-cluster-6</code> master node:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> redis-cluster-0 -- redis-cli --cluster del-node \</span><br><span class="line">$(kubectl get pod redis-cluster-0 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379 \</span><br><span class="line">27259a4ae75c616bbde2f8e8c6dfab2c173f2a1d</span><br></pre></td></tr></table></figure>
+
+<p>Finally, we can rebalance the remaining masters to evenly distribute slots:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> redis-cluster-0 -- redis-cli --cluster rebalance --cluster-use-empty-masters \</span><br><span class="line">$(kubectl get pod redis-cluster-0 -o jsonpath=<span class="string">'&#123;.status.podIP&#125;'</span>):6379</span><br></pre></td></tr></table></figure>
+
+<h3 id="Scaling-down"><a href="#Scaling-down" class="headerlink" title="Scaling down"></a>Scaling down</h3><p>After the master has been resharded and both nodes are removed from the cluster, it is safe to scale down the statefulset:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl scale statefulset redis-cluster --replicas=6</span><br></pre></td></tr></table></figure>
+
+<h2 id="Cleaning-up"><a href="#Cleaning-up" class="headerlink" title="Cleaning up"></a>Cleaning up</h2><p>``` bash<br>kubectl delete statefulset,svc,configmap,pvc -l app=redis-cluster</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://bililab.com/2020/02/11/Redis-Cluster/" data-id="ck6hmrb4r00011bpf2o53amlt" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-AES-RSA-api接口数据加密" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/11/AES-RSA-api%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86/" class="article-date">
+  <time datetime="2020-02-11T14:13:32.000Z" itemprop="datePublished">2020-02-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/11/AES-RSA-api%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86/">AES RSA api接口数据加密</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>解决方案<br>需要联合使用对称加密AES与非对称加密RSA</p>
+<p>每次调用客户端随机产生一个aes密码，并把调用明文加密成调用密文，然后将aes密码用rsa公玥加密成密码密文后连同调用调用密文一起传给后端，后端使用rsa私玥对密码密文进行解密aes密码，然后aes密码解密调用密文获得调用明文。然后进行业务处理。后端在返回响应数据时，使用刚才的aes密码，将响应明文加密成响应密文，传递给客户端。客户端收到响应密文后，使用aes密码解密得到响应明文。</p>
+<p><img src="https://cdn.oss.biliyun.net/blog/1.0/production/20180227173359994_biliyun.png" alt="20180227173359994_biliyun"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">明文数据使用 AES 对称加密算法进行加密, AES 密钥使用 RSA 进行加密传输并对数据进行数据签名</span><br><span class="line">加密结果密文数据结构: [数字签名(AES密钥密文+明文数据密文)][AES密钥密文][明文密文]</span><br></pre></td></tr></table></figure>
+
+<p><strong>参考</strong><br><a href="http://www.lampnick.com/php/728" target="_blank" rel="noopener">使用AES ECB PKCS5Padding+RSA对接口进行签名及加密的go代码实现</a><br><a href="https://github.com/takmongwai/aes-rsa" target="_blank" rel="noopener">使用 AES 和 RSA 对数据进行加密和解密</a><br><a href="https://blog.csdn.net/xz_studying/article/details/80314111" target="_blank" rel="noopener">RSA总结</a></p>
+<p><a href="https://ekyu.moe/article/aes-cfb-in-golang-and-nodejs/" target="_blank" rel="noopener">aes cfb参考nodejs</a></p>
+<p><a href="https://www.cnblogs.com/starwolf/p/3365834.htmlhttps://www.cnblogs.com/starwolf/p/3365834.html" target="_blank" rel="noopener">aes gcm cbc cfb等5种模式简介</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://bililab.com/2020/02/11/AES-RSA-api%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86/" data-id="ck6hmrb4i00001bpf4tsqhz1p" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/11/hello-world/" class="article-date">
+  <time datetime="2020-02-11T08:35:13.373Z" itemprop="datePublished">2020-02-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/02/11/hello-world/">Hello World</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://bililab.com/2020/02/11/hello-world/" data-id="ck6hmrb4t00021bpfavh4enpk" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/02/11/k8s-install/">k8s install</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/rook-ceph-debug/">rook-ceph debug</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/Bull-im%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/">Bull.im接口文档</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/Redis-Cluster/">Redis Cluster</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/11/AES-RSA-api%E6%8E%A5%E5%8F%A3%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86/">AES RSA api接口数据加密</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      <a style="float:right" name="href" href="http://www.beian.miit.gov.cn/" target="_blank" class="copyright-text">渝ICP备19008056号</a>
+      &copy; 2020 Bililab.com<br>
+      <!-- Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> -->
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
