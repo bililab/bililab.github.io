@@ -100,4 +100,4 @@ theme: landscape
 deploy:
   type: 'git'
   repository: 'https://github.com/bililab/bililab.github.io.git'
-  branch: master
+  branch: gh-pages
