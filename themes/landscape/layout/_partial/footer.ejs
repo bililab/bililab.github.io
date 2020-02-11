@@ -1,0 +1,12 @@
+<footer id="footer">
+  <% if (theme.sidebar === 'bottom'){ %>
+    <%- partial('_partial/sidebar') %>
+  <% } %>
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      <a style="float:right" name="href" href="http://www.beian.miit.gov.cn/" target="_blank" class="copyright-text">渝ICP备19008056号</a>
+      &copy; <%= date(new Date(), 'YYYY') %> <%= config.author || config.title %><br>
+      <!-- <%= __('powered_by') %> <a href="http://hexo.io/" target="_blank">Hexo</a> -->
+    </div>
+  </div>
+</footer>
